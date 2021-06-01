@@ -11,6 +11,15 @@ public class Client : MonoBehaviour
     public int port = 50000;
     private TcpClient socket;
     private Thread listenThread;
+    public bool connect = false;
+
+    void Update()
+    {
+        if (connect) {
+            Listen();
+            connect = false;
+        }
+    }
 
     public void Listen(string ip, int port)
     {
@@ -45,15 +54,37 @@ public class Client : MonoBehaviour
     private void ReadServerMessage()
     {
         byte[] byteBuffer = new byte[1024];
+        string buffer = "";
         using (NetworkStream stream = socket.GetStream()) {
             int length;
 
             while ((length = stream.Read(byteBuffer, 0, byteBuffer.Length)) != 0) {
                 byte[] data = new byte[length];
                 System.Array.Copy(byteBuffer, 0, data, 0, length);
-                string message = Encoding.ASCII.GetString(data);
-                Debug.Log("[SRV] " + message);
+                buffer += Encoding.ASCII.GetString(data);
+                int nlIndex = buffer.IndexOf('\n');
+                while (nlIndex != -1) {
+                    string command = buffer.Substring(0, nlIndex);
+                    if (nlIndex >= buffer.Length - 1)
+                        buffer = "";
+                    else {
+                        buffer = buffer.Substring(nlIndex + 1,
+                            buffer.Length - (nlIndex + 1));
+                    }
+                    HandleCommand(command, stream);
+                    nlIndex = buffer.IndexOf('\n');
+                }
             }
+        }
+    }
+
+    private void HandleCommand(string command, NetworkStream stream)
+    {
+        if (command.Equals("")) return;
+        Debug.Log("[SRV] " + command);
+        if (command.Equals("WELCOME")) {
+            byte[] data = Encoding.ASCII.GetBytes("GRAPHIC\n");
+            stream.Write(data, 0, data.Length);
         }
     }
 }

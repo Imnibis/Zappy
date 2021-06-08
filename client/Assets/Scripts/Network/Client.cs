@@ -5,19 +5,29 @@ using System.Threading;
 using System.Text;
 using UnityEngine;
 
+[RequireComponent(typeof(PacketManager))]
 public class Client : MonoBehaviour
 {
     public string ip = "127.0.0.1";
     public int port = 50000;
-    private TcpClient socket;
+    private TcpClient socket = null;
     private Thread listenThread;
+    private PacketManager packetManager;
     public bool connect = false;
+
+    private void Start()
+    {
+        packetManager = GetComponent<PacketManager>();
+    }
 
     void Update()
     {
         if (connect) {
             Listen();
             connect = false;
+        }
+        if (socket != null && socket.Connected) {
+            ReadServerMessage();
         }
     }
 
@@ -31,22 +41,10 @@ public class Client : MonoBehaviour
     public void Listen()
     {
         try {
-            listenThread = new Thread(new ThreadStart(ThreadListen));
-            listenThread.IsBackground = true;
-            listenThread.Start();
-        } catch (System.Exception e) {
-            Debug.Log("Client connect exception: " + e);
+            socket = new TcpClient();
+            socket.Connect(ip, port);
         }
-    }
-
-    private void ThreadListen()
-    {
-        try {
-            socket = new TcpClient(ip, port);
-            while (true) {
-                ReadServerMessage();
-            }
-        } catch (SocketException e) {
+        catch (SocketException e) {
             Debug.Log("Socket error: " + e);
         }
     }
@@ -56,35 +54,51 @@ public class Client : MonoBehaviour
         byte[] byteBuffer = new byte[1024];
         string buffer = "";
         using (NetworkStream stream = socket.GetStream()) {
-            int length;
-
-            while ((length = stream.Read(byteBuffer, 0, byteBuffer.Length)) != 0) {
-                byte[] data = new byte[length];
-                System.Array.Copy(byteBuffer, 0, data, 0, length);
-                buffer += Encoding.ASCII.GetString(data);
-                int nlIndex = buffer.IndexOf('\n');
-                while (nlIndex != -1) {
-                    string command = buffer.Substring(0, nlIndex);
-                    if (nlIndex >= buffer.Length - 1)
-                        buffer = "";
-                    else {
-                        buffer = buffer.Substring(nlIndex + 1,
-                            buffer.Length - (nlIndex + 1));
-                    }
-                    HandleCommand(command, stream);
-                    nlIndex = buffer.IndexOf('\n');
-                }
-            }
+            stream.ReadAsync(byteBuffer, 0, byteBuffer.Length).ContinueWith(task => HandleServerMessage(task.Result, ref byteBuffer, ref buffer));
+            HandleCommandQueue(stream);
         }
     }
 
-    private void HandleCommand(string command, NetworkStream stream)
+    private void HandleServerMessage(int length, ref byte[] byteBuffer, ref string buffer)
+    {
+        Debug.Log("hsm");
+        byte[] data = new byte[length];
+        System.Array.Copy(byteBuffer, 0, data, 0, length);
+        buffer += Encoding.ASCII.GetString(data);
+        int nlIndex = buffer.IndexOf('\n');
+        while (nlIndex != -1) {
+            string command = buffer.Substring(0, nlIndex);
+            if (nlIndex >= buffer.Length - 1)
+                buffer = "";
+            else {
+                buffer = buffer.Substring(nlIndex + 1,
+                    buffer.Length - (nlIndex + 1));
+            }
+            HandleCommand(command);
+            nlIndex = buffer.IndexOf('\n');
+        }
+    }
+
+    public void HandleWelcomeHandshake(string[] args)
+    {
+        packetManager.SendPacket("GRAPHIC", new string[0]);
+    }
+
+    private void HandleCommand(string command)
     {
         if (command.Equals("")) return;
         Debug.Log("[SRV] " + command);
-        if (command.Equals("WELCOME")) {
-            byte[] data = Encoding.ASCII.GetBytes("GRAPHIC\n");
-            stream.Write(data, 0, data.Length);
+        packetManager.AddRecievedPacketToQueue(command);
+    }
+
+    private void HandleCommandQueue(NetworkStream stream)
+    {
+        lock (packetManager.packetSendQueue) {
+            foreach (string packet in packetManager.packetSendQueue) {
+                byte[] data = Encoding.ASCII.GetBytes(packet);
+                stream.Write(data, 0, data.Length);
+            }
+            packetManager.packetSendQueue.Clear();
         }
     }
 }

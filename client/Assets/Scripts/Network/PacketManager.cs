@@ -12,8 +12,8 @@ public class PacketCallback
 
 public class PacketManager : MonoBehaviour
 {
+    public UnityEvent<string> packetSendCallback;
     public List<PacketCallback> packetCallbacks = new List<PacketCallback>();
-    public List<string> packetSendQueue = new List<string>();
     public List<string> packetRecieveQueue = new List<string>();
 
     public void Update()
@@ -34,11 +34,10 @@ public class PacketManager : MonoBehaviour
         if (spaceIndex != -1) {
             packet = command.Substring(0, spaceIndex);
             if (spaceIndex < command.Length - 1) {
-                args = command.Split(' ');
+                args = command.Substring(spaceIndex + 1,
+                    command.Length - (spaceIndex + 1)).Split(' ');
             }
-            else {
-                args = new string[0];
-            }
+            else args = new string[0];
         }
         else {
             packet = command;
@@ -67,15 +66,14 @@ public class PacketManager : MonoBehaviour
     public void SendPacket(string packet, string[] args)
     {
         string fullCommand;
-        if (args.Length == 0) fullCommand = packet + "\n";
-        else fullCommand = packet + " " + string.Join(" ", args) + "\n";
+        if (args.Length == 0) fullCommand = packet;
+        else fullCommand = packet + " " + string.Join(" ", args);
         SendPacket(fullCommand);
     }
 
     public void SendPacket(string fullCommand)
     {
-        lock (packetSendQueue) {
-            packetSendQueue.Add(fullCommand);
-        }
+        fullCommand += '\n';
+        packetSendCallback.Invoke(fullCommand);
     }
 }

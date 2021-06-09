@@ -26,9 +26,6 @@ public class Client : MonoBehaviour
             Listen();
             connect = false;
         }
-        if (socket != null && socket.Connected) {
-            ReadServerMessage();
-        }
     }
 
     public void Listen(string ip, int port)
@@ -41,8 +38,21 @@ public class Client : MonoBehaviour
     public void Listen()
     {
         try {
-            socket = new TcpClient();
-            socket.Connect(ip, port);
+            listenThread = new Thread(new ThreadStart(ThreadListen));
+            listenThread.IsBackground = true;
+            listenThread.Start();
+        } catch (System.Exception e) {
+            Debug.Log("Client connect exception: " + e);
+        }
+    }
+
+    public void ThreadListen()
+    {
+        try {
+            socket = new TcpClient(ip, port);
+            while (true) {
+                ReadServerMessage();
+            }
         }
         catch (SocketException e) {
             Debug.Log("Socket error: " + e);
@@ -53,15 +63,16 @@ public class Client : MonoBehaviour
     {
         byte[] byteBuffer = new byte[1024];
         string buffer = "";
+        int length;
+
         using (NetworkStream stream = socket.GetStream()) {
-            stream.ReadAsync(byteBuffer, 0, byteBuffer.Length).ContinueWith(task => HandleServerMessage(task.Result, ref byteBuffer, ref buffer));
-            HandleCommandQueue(stream);
+            while ((length = stream.Read(byteBuffer, 0, byteBuffer.Length)) != 0)
+                HandleServerMessage(length, ref byteBuffer, ref buffer);
         }
     }
 
     private void HandleServerMessage(int length, ref byte[] byteBuffer, ref string buffer)
     {
-        Debug.Log("hsm");
         byte[] data = new byte[length];
         System.Array.Copy(byteBuffer, 0, data, 0, length);
         buffer += Encoding.ASCII.GetString(data);
@@ -81,7 +92,7 @@ public class Client : MonoBehaviour
 
     public void HandleWelcomeHandshake(string[] args)
     {
-        packetManager.SendPacket("GRAPHIC", new string[0]);
+        packetManager.SendPacket("GRAPHIC");
     }
 
     private void HandleCommand(string command)
@@ -91,14 +102,17 @@ public class Client : MonoBehaviour
         packetManager.AddRecievedPacketToQueue(command);
     }
 
-    private void HandleCommandQueue(NetworkStream stream)
+    public void SendPacket(string packet)
     {
-        lock (packetManager.packetSendQueue) {
-            foreach (string packet in packetManager.packetSendQueue) {
+        if (socket == null) return;
+        try {
+            NetworkStream stream = socket.GetStream();
+            if (stream.CanWrite) {
                 byte[] data = Encoding.ASCII.GetBytes(packet);
                 stream.Write(data, 0, data.Length);
             }
-            packetManager.packetSendQueue.Clear();
+        } catch (SocketException e) {
+            Debug.Log("Exception on packet send: " + e);
         }
     }
 }

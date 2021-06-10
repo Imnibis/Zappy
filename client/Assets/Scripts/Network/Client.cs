@@ -13,19 +13,11 @@ public class Client : MonoBehaviour
     private TcpClient socket = null;
     private Thread listenThread;
     private PacketManager packetManager;
-    public bool connect = false;
 
     private void Start()
     {
         packetManager = GetComponent<PacketManager>();
-    }
-
-    void Update()
-    {
-        if (connect) {
-            Listen();
-            connect = false;
-        }
+        Listen();
     }
 
     public void Listen(string ip, int port)
@@ -92,13 +84,15 @@ public class Client : MonoBehaviour
 
     public void HandleWelcomeHandshake(string[] args)
     {
+        Debug.Log("Connected to server");
         packetManager.SendPacket("GRAPHIC");
     }
 
     private void HandleCommand(string command)
     {
         if (command.Equals("")) return;
-        Debug.Log("[SRV] " + command);
+        if (!packetManager.PacketHasCallback(command))
+            Debug.Log("[SRV] " + command);
         packetManager.AddRecievedPacketToQueue(command);
     }
 

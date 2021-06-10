@@ -26,6 +26,28 @@ public class PacketManager : MonoBehaviour
         }
     }
 
+    public bool ArgsAreInt(string[] args)
+    {
+        int dummy;
+
+        foreach (string arg in args) {
+            if (!int.TryParse(arg, out dummy))
+                return false;
+        }
+        return true;
+    }
+
+    public bool PacketHasCallback(string command)
+    {
+        int spaceIndex = command.IndexOf(' ');
+        string packet;
+        if (spaceIndex != -1)
+            packet = command.Substring(0, spaceIndex);
+        else
+            packet = command;
+        return packetCallbacks.Exists(x => x.packet.Equals(packet));
+    }
+
     public void InvokeCallback(string command)
     {
         int spaceIndex = command.IndexOf(' ');
@@ -50,8 +72,9 @@ public class PacketManager : MonoBehaviour
     {
         lock (packetCallbacks) {
             foreach (PacketCallback callback in packetCallbacks) {
-                if (callback.packet.Equals(packet))
+                if (callback.packet.Equals(packet)) {
                     callback.callback.Invoke(args);
+                }
             }
         }
     }

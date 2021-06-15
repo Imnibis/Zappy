@@ -20,6 +20,7 @@ class Client():
         self.port = None
         self.name = None
         self.machine = "localhost"
+        self.get_info(len(av))
 
     def get_info(self, avlen:int) -> None:
         for i in range(1, avlen, 2):
@@ -47,7 +48,6 @@ class Client():
 
 def main():
     client = Client()
-    client.get_info(len(av))
 
 def helper():
     stdout.write("USAGE:\t./zappy_ai -p port -n name -h machine\n"

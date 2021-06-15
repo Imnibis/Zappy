@@ -18,3 +18,16 @@ void init_map(map_t *map, int height, int width)
         }
     }
 }
+
+void go_prev(map_t *map)
+{
+    for (; map->tiles->prev != NULL; map->tiles = map->tiles->prev);
+}
+
+void free_map(map_t *map)
+{
+    for (; map->tiles->prev != NULL; map->tiles = map->tiles->prev)
+        free(map->tiles->next);
+    free(map->tiles);
+    free(map);
+}

@@ -7,11 +7,6 @@
 
 #include "map.h"
 
-void go_prev(map_t *map)
-{
-    for (; map->tiles->prev != NULL; map->tiles = map->tiles->prev);
-}
-
 void print_map(map_t *map)
 {
     FILE *fd = fopen("map.txt", "w");
@@ -75,9 +70,6 @@ map_t *map(int height, int width)
     init_map(map, height, width);
     go_prev(map);
     fill_map(map, height, width);
-    for (; map->tiles->prev != NULL; map->tiles = map->tiles->prev)
-        free(map->tiles->next);
-    free(map->tiles);
-    free(map);
+
     return (map);
 }

@@ -15,8 +15,39 @@ class Player():
         pin = [0, 0, 0, 0, 0, 0, 0] # player inventory
         tna =  list()               # name of all the teams
 
+class Client():
+    def __init__(self) -> None:
+        self.port = None
+        self.name = None
+        self.machine = "localhost"
+
+    def get_info(self, avlen:int) -> None:
+        for i in range(1, avlen, 2):
+            if (av[i] == "-p"):
+                try:
+                    self.port = int(av[i + 1])
+                    i += 1
+                except ValueError:
+                    stderr.write("Error: -p port == int, please check --help for more info\n")
+                    xit(84)
+            elif (av[i] == "-n"):
+                try:
+                    self.name = str(av[i + 1])
+                except ValueError:
+                    stderr.write("Error: -n name == str, please check --help for more info\n")
+                i += 1
+            elif (av[i] == "-h"):
+                try:
+                    self.machine = str(av[i + 1])
+                except ValueError:
+                    stderr.write("Error: -h machine == str, please check --help for more info\n")
+            else:
+                stderr.write("Error: Bad argument -> check --help for more info\n")
+                xit(84)
+
 def main():
-    pass
+    client = Client()
+    client.get_info(len(av))
 
 def helper():
     stdout.write("USAGE:\t./zappy_ai -p port -n name -h machine\n"

@@ -5,7 +5,7 @@
 ** main.c
 */
 
-#include "include/config.h"
+#include "config.h"
 
 int print_help()
 {

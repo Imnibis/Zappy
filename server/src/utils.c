@@ -5,7 +5,7 @@
 ** utils.c
 */
 
-#include "include/config.h"
+#include "config.h"
 
 int setclient(const char *nb, server_config_t *config)
 {

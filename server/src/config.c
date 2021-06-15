@@ -5,7 +5,7 @@
 ** parser.c
 */
 
-#include "include/config.h"
+#include "config.h"
 
 
 struct exec tab[] = {

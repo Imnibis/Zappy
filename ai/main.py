@@ -2,6 +2,7 @@
 from sys import argv as av
 from sys import stderr, stdout
 from sys import exit as xit
+import socket
 
 class Map():
     def __init__(self) -> None:
@@ -65,5 +66,8 @@ def cmd_checkout() -> None:
         pass
 
 if __name__ == '__main__':
-    cmd_checkout()
-    main()
+    try:
+        cmd_checkout()
+        main()
+    except KeyboardInterrupt:
+        xit(0)

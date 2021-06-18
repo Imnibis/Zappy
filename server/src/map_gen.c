@@ -35,7 +35,7 @@ void fill_map(map_t *map, int height, int width)
     int ttl = height * width;
     int re[] = {ttl * 0.5, ttl * 0.3, ttl * 0.15, ttl * 0.1,
     ttl * 0.1, ttl * 0.08, ttl * 0.05, -84};
-    
+
     srand(time(NULL));
     for (int i = 0; re[i] != -84; i++) {
         while (re[i] != 0) {
@@ -50,7 +50,7 @@ void init_ressources(map_t *map)
 {
     for (int i = 0; i != 7; i++)
         map->tiles->re[i] = 0;
-    map->tiles->re[7] = -84; 
+    map->tiles->re[7] = -84;
 }
 
 map_t *map(int height, int width)

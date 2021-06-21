@@ -35,7 +35,7 @@ void set_newclient(server_t *s, int *sock)
     go_previous(s);
 }
 
-void init_server(server_t *s)
+void init_server(server_t *s, map_t *m)
 {
     int max_fd = s->sockid;
     int nw;
@@ -63,8 +63,8 @@ void init_server(server_t *s)
                     FD_CLR(s->players->fd, &rfd);
                     FD_CLR(s->players->fd, &wfd);
                 } else {
-                    if (strcmp(str, "inventory") == 0)
-                        request_inventory(s);
+                    if (strcmp(str, "GRAPHIC") == 0)
+                        send_map_gui(s, m);
                     printf("%s\n", str);
                 }
             }

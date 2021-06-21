@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #include <stdbool.h>
 
+#include "map.h"
 #include "config.h"
 
 typedef struct player_s player_t;
@@ -58,7 +59,10 @@ void go_previous(server_t *s);
 void init_clients(server_t *s);
 int create_server(server_t *s, server_config_t *info);
 int serv_attribution(server_t *s);
-void init_server(server_t *s);
+void init_server(server_t *s, map_t *m);
 char *get_next_line(int fd);
 void request_inventory(server_t *s);
+void map(map_t *m, int height, int width);
+void send_map_gui(server_t *s, map_t *m);
+void init_map(map_t *map, int height, int width);
 #endif /* !SERVER_H_ */

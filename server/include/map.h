@@ -28,7 +28,6 @@ typedef struct map_s {
     int width;
     tile_t *tiles;
 } map_t;
-map_t *map(int height, int width);
+
 void go_prev(map_t *map);
-void init_map(map_t *map, int height, int width);
 #endif /* !ZAPPY_SERVER_H_ */

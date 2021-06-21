@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
-    public List<GameObject> resources;
+    public GameObject orePrefab;
+    public List<string> resources;
 
-    public GameObject GetResource(int id)
+    public string GetResource(int id)
     {
         if (id >= resources.Count)
             return null;

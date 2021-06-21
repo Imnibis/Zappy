@@ -91,7 +91,7 @@ public class Client : MonoBehaviour
     private void HandleCommand(string command)
     {
         if (command.Equals("")) return;
-        if (!packetManager.PacketHasCallback(command))
+        //if (!packetManager.PacketHasCallback(command))
             Debug.Log("[SRV] " + command);
         packetManager.AddRecievedPacketToQueue(command);
     }

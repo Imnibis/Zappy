@@ -510,12 +510,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba25e93e88768c448d872cbe7f3906f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  orePrefab: {fileID: 5218410720703714488, guid: 57f280efbf5e59347b28b70ceb7180a4, type: 3}
   resources:
-  - {fileID: 2903365668269912260, guid: bf23d98213585dd42bc288e4d824ea78, type: 3}
-  - {fileID: 7132400608319075779, guid: bbba75e0562de8c45b1cb61549572604, type: 3}
-  - {fileID: 914006116673974159, guid: 37f466a2d6408fa44a274dd522105c40, type: 3}
-  - {fileID: 6462176984633867850, guid: 6cde738238d423d4aa5d0b37a069a132, type: 3}
-  - {fileID: 9217489761849323163, guid: 4090d6c7af3eaef4fa79686567932625, type: 3}
+  - food
+  - linemate
+  - deraumere
+  - sibur
+  - mendiane
+  - phiras
+  - thystame
 --- !u!1 &2085113801
 GameObject:
   m_ObjectHideFlags: 0

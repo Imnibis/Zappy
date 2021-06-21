@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
@@ -39,30 +40,26 @@ public class Map : MonoBehaviour
     {
         Vector2 pos = new Vector2();
         int i = 0;
-        int tileResources = 0;
+        Dictionary<string, int> resourceQuantities = new Dictionary<string, int>();
+
         if (!HandleTileContentPacketErrors(args)) return;
         foreach (string arg in args) {
             if (i == 0)
                 pos.x = int.Parse(arg);
             else if (i == 1)
                 pos.y = int.Parse(arg);
-            else {
-                int quantity = int.Parse(arg);
-                if (quantity == 0) {
-                    i++;
-                    continue;
-                }
-                GameObject resourcePrefab = resourceManager.GetResource(i - 2);
-                if (resourcePrefab == null) {
-                    Debug.LogError("Unknown resource id " + (i++ - 2));
-                    continue;
-                }
-                GameObject resourceObject = Instantiate(resourcePrefab, transform);
-                resourceObject.transform.position = MapToWorldPos(pos, (float) tileResources / 2 + 0.5f);
-                tileResources++;
-            }
+            else
+                resourceQuantities.Add(resourceManager.GetResource(i - 2), int.Parse(arg));
             i++;
         }
+        if (resourceQuantities.Where(kvp => kvp.Value != 0).Count() == 0)
+            return;
+        GameObject resourcePrefab = resourceManager.orePrefab;
+        if (resourcePrefab == null)
+            Debug.LogError("No resource prefab set");
+        GameObject resourceObject = Instantiate(resourcePrefab, transform);
+        resourceObject.transform.position = MapToWorldPos(pos, 0.5f);
+        resourceObject.GetComponent<Ore>().ShowResources(resourceQuantities);
     }
 
     bool HandleTileContentPacketErrors(string[] args)

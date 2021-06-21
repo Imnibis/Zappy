@@ -5,7 +5,7 @@
 ** map_gen
 */
 
-#include "map.h"
+#include "server.h"
 
 void print_map(map_t *map)
 {
@@ -53,12 +53,12 @@ void init_ressources(map_t *map)
     map->tiles->re[7] = -84;
 }
 
-map_t *map(int height, int width)
+void map(map_t *map, int height, int width)
 {
-    map_t *map = malloc(sizeof(map_t));
-
     map->tiles = malloc(sizeof(tile_t));
     map->tiles->prev = NULL;
+    map->height = height;
+    map->width = width;
     for (int i = 0; i != width * height; i++) {
         map->tiles->pos = i + 1;
         map->tiles->next = malloc(sizeof(tile_t));
@@ -70,6 +70,5 @@ map_t *map(int height, int width)
     init_map(map, height, width);
     go_prev(map);
     fill_map(map, height, width);
-
-    return (map);
+    go_prev(map);
 }

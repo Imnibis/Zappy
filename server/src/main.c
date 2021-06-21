@@ -7,7 +7,7 @@
 
 #include "map.h"
 #include "server.h"
-
+void print_map(map_t *map);
 int print_help()
 {
     printf("USAGE: ./zappy_server -p port -x width -y height -n name1 name2 ");
@@ -37,6 +37,8 @@ int main(int ac, char **argv)
     }
     if (serv_attribution(s) == 1)
         return 84;
-    init_server(s);
+    map_t *m = malloc(sizeof(map_t));
+    map(m, server_info.height, server_info.width);
+    init_server(s, m);
     return 0;
 }

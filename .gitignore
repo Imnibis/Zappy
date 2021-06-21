@@ -1,0 +1,7 @@
+*.py
+zappy_server
+zappy_ai
+zappy_gui
+ai/
+client/
+.vscode/

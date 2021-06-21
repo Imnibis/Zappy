@@ -224,7 +224,6 @@ GameObject:
   - component: {fileID: 8467825553482699300}
   - component: {fileID: 1830910355259673778}
   - component: {fileID: 1670230024348432232}
-  - component: {fileID: 4779591822981325396}
   m_Layer: 0
   m_Name: Food Crystal
   m_TagString: Untagged
@@ -274,7 +273,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -296,21 +295,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4779591822981325396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 593576574463301484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba4f0620aa56503498125a9896cdbdf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
-  brightness: 85
-  refresh: 0
 --- !u!1 &639988281011586006
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +552,6 @@ GameObject:
   - component: {fileID: 1314359961354818218}
   - component: {fileID: 1322561540016120350}
   - component: {fileID: 1331013298576724248}
-  - component: {fileID: 1536738147415334966}
   m_Layer: 0
   m_Name: Food Crystal
   m_TagString: Untagged
@@ -618,7 +601,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -640,21 +623,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1536738147415334966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1308597328388098512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba4f0620aa56503498125a9896cdbdf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
-  brightness: 85
-  refresh: 0
 --- !u!1 &1399804992351094154
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,7 +716,6 @@ GameObject:
   - component: {fileID: 5253397343725527606}
   - component: {fileID: 697364796414709791}
   - component: {fileID: 2283469629506006613}
-  - component: {fileID: 9159729801426627565}
   m_Layer: 0
   m_Name: Food Crystal
   m_TagString: Untagged
@@ -798,7 +765,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -820,21 +787,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &9159729801426627565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1679499547900128272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba4f0620aa56503498125a9896cdbdf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
-  brightness: 85
-  refresh: 0
 --- !u!1 &1794353706763723886
 GameObject:
   m_ObjectHideFlags: 0
@@ -1685,7 +1637,6 @@ GameObject:
   - component: {fileID: 340036492457105050}
   - component: {fileID: 2830846363717473003}
   - component: {fileID: 3999701141894692115}
-  - component: {fileID: 2594720531303400370}
   m_Layer: 0
   m_Name: Food Crystal
   m_TagString: Untagged
@@ -1735,7 +1686,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1757,21 +1708,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2594720531303400370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5125368243419615860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba4f0620aa56503498125a9896cdbdf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
-  brightness: 85
-  refresh: 0
 --- !u!1 &5213503580145332305
 GameObject:
   m_ObjectHideFlags: 0
@@ -2210,7 +2146,6 @@ GameObject:
   - component: {fileID: 8781347549520026760}
   - component: {fileID: 4554827044917827156}
   - component: {fileID: 867925333528864619}
-  - component: {fileID: 2040505108852881597}
   m_Layer: 0
   m_Name: Food Crystal
   m_TagString: Untagged
@@ -2260,7 +2195,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2282,21 +2217,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2040505108852881597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6822790189388998308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba4f0620aa56503498125a9896cdbdf0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
-  brightness: 85
-  refresh: 0
 --- !u!1 &7059340551740106074
 GameObject:
   m_ObjectHideFlags: 0

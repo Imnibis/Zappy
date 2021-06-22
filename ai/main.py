@@ -31,9 +31,9 @@ class Socket():
         while (len(msg) < 100):
             chunk = self.sock.recv(100 - len(msg))
             if chunk.find(10) != -1:
-                msg = msg + str(chunk)
+                msg += str(chunk)
                 return msg
-        msg = msg + chunk
+        msg += str(chunk)
         return msg
 
 class Client():

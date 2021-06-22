@@ -10,6 +10,7 @@ public class Client : MonoBehaviour
 {
     public string ip = "127.0.0.1";
     public int port = 50000;
+    public bool running = true;
     private TcpClient socket = null;
     private Thread listenThread;
     private PacketManager packetManager;
@@ -18,6 +19,11 @@ public class Client : MonoBehaviour
     {
         packetManager = GetComponent<PacketManager>();
         Listen();
+    }
+
+    private void OnApplicationQuit()
+    {
+        running = false;
     }
 
     public void Listen(string ip, int port)
@@ -42,7 +48,7 @@ public class Client : MonoBehaviour
     {
         try {
             socket = new TcpClient(ip, port);
-            while (true) {
+            while (running) {
                 ReadServerMessage();
             }
         }
@@ -58,8 +64,9 @@ public class Client : MonoBehaviour
         int length;
 
         using (NetworkStream stream = socket.GetStream()) {
-            while ((length = stream.Read(byteBuffer, 0, byteBuffer.Length)) != 0)
+            while ((length = stream.Read(byteBuffer, 0, byteBuffer.Length)) != 0) {
                 HandleServerMessage(length, ref byteBuffer, ref buffer);
+            }
         }
     }
 
@@ -91,7 +98,7 @@ public class Client : MonoBehaviour
     private void HandleCommand(string command)
     {
         if (command.Equals("")) return;
-        //if (!packetManager.PacketHasCallback(command))
+        if (!packetManager.PacketHasCallback(command))
             Debug.Log("[SRV] " + command);
         packetManager.AddRecievedPacketToQueue(command);
     }

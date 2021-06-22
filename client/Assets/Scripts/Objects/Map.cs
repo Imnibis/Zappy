@@ -8,9 +8,9 @@ public class Map : MonoBehaviour
 {
     public Camera camera;
     public Vector2Int size;
-    public PacketManager packetManager;
     public ResourceManager resourceManager;
 
+    Dictionary<Vector2, Ore> mapContent = new Dictionary<Vector2, Ore>();
     MeshFilter meshFilter;
     MeshRenderer renderer;
 
@@ -27,7 +27,7 @@ public class Map : MonoBehaviour
             Debug.LogError("HandleMapSizePacket: command must have 2 args, not " + args.Length);
             return;
         }
-        if (!packetManager.ArgsAreInt(args)) {
+        if (!PacketManager.ArgsAreInt(args)) {
             Debug.LogError("HandleMapSizePacket: both args must be ints");
             return;
         }
@@ -52,14 +52,22 @@ public class Map : MonoBehaviour
                 resourceQuantities.Add(resourceManager.GetResource(i - 2), int.Parse(arg));
             i++;
         }
-        if (resourceQuantities.Where(kvp => kvp.Value != 0).Count() == 0)
+        if (resourceQuantities.Where(kvp => kvp.Value != 0).Count() == 0) {
+            if (mapContent.ContainsKey(pos)) {
+                Destroy(mapContent[pos].gameObject);
+                mapContent.Remove(pos);
+            }
             return;
-        GameObject resourcePrefab = resourceManager.orePrefab;
-        if (resourcePrefab == null)
-            Debug.LogError("No resource prefab set");
-        GameObject resourceObject = Instantiate(resourcePrefab, transform);
-        resourceObject.transform.position = MapToWorldPos(pos, 0.5f);
-        resourceObject.GetComponent<Ore>().ShowResources(resourceQuantities);
+        }
+        if (!mapContent.ContainsKey(pos)) {
+            GameObject resourcePrefab = resourceManager.orePrefab;
+            if (resourcePrefab == null)
+                Debug.LogError("No resource prefab set");
+            GameObject resourceObject = Instantiate(resourcePrefab, transform);
+            resourceObject.transform.position = MapToWorldPos(pos, 0.5f);
+            mapContent.Add(pos, resourceObject.GetComponent<Ore>());
+        }
+        mapContent[pos].ShowResources(resourceQuantities);
     }
 
     bool HandleTileContentPacketErrors(string[] args)
@@ -68,14 +76,12 @@ public class Map : MonoBehaviour
             Debug.LogError("HandleTileContentPacket: command must have 9 args, not " + args.Length);
             return false;
         }
-        if (!packetManager.ArgsAreInt(args)) {
+        if (!PacketManager.ArgsAreInt(args)) {
             Debug.LogError("HandleTileContentPacket: all args must be ints");
             return false;
         }
         return true;
     }
-
-    
 
     public void SetMapSize(Vector2Int size)
     {
@@ -116,10 +122,21 @@ public class Map : MonoBehaviour
         meshFilter.mesh = mesh;
     }
 
-    Vector3 MapToWorldPos(Vector2 mapPos, float height)
+    public Vector3 MapToWorldPos(Vector2 mapPos, float height)
     {
         Vector2 halfSize = size / 2;
 
         return new Vector3(mapPos.x - halfSize.x + 0.5f, height, mapPos.y - halfSize.y + 0.5f);
+    }
+
+    public Quaternion OrientationToQuaternion(Orientation or)
+    {
+        Vector3[] forwardVector = new Vector3[] {
+            new Vector3(0, 0, -1), new Vector3(0, 0, -1),
+            new Vector3(1, 0, 0), new Vector3(0, 0, 1),
+            new Vector3(-1, 0, 0)
+        };
+
+        return Quaternion.LookRotation(forwardVector[(int)or], new Vector3(0, 1, 0));
     }
 }

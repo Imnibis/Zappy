@@ -262,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ip: 127.0.0.1
   port: 50000
+  running: 1
 --- !u!114 &1038544500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,6 +355,86 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - packet: tna
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1804463317}
+          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+          m_MethodName: HandleTeamNamePacket
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - packet: pnw
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1804463319}
+          m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+          m_MethodName: HandleNewPlayerPacket
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - packet: ppo
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1804463319}
+          m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+          m_MethodName: HandlePlayerPositionPacket
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - packet: plv
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1804463319}
+          m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+          m_MethodName: HandlePlayerLevelPacket
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - packet: pdi
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1804463319}
+          m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
+          m_MethodName: HandlePlayerDeathPacket
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   packetRecieveQueue: []
 --- !u!1 &1647771368
 GameObject:
@@ -430,7 +511,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 2085113803}
   size: {x: 0, y: 0}
-  packetManager: {fileID: 1038544500}
   resourceManager: {fileID: 1804463318}
 --- !u!4 &1647771371
 Transform:
@@ -465,6 +545,7 @@ GameObject:
   - component: {fileID: 1804463316}
   - component: {fileID: 1804463317}
   - component: {fileID: 1804463318}
+  - component: {fileID: 1804463319}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -498,6 +579,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e329b83c2926574d886356c0e265757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  teamColors:
+  - {r: 0.8962264, g: 0.21560161, b: 0.31346914, a: 0}
+  - {r: 0.2216981, g: 0.642897, b: 1, a: 0}
+  - {r: 0.47668213, g: 0.9811321, b: 0.51871955, a: 0}
+  - {r: 0.8773585, g: 0.5997678, b: 0.25244746, a: 0}
+  - {r: 0.9528302, g: 0.91757715, b: 0.14831792, a: 0}
+  - {r: 0.62886554, g: 0.18396229, b: 1, a: 0}
+  - {r: 1, g: 0.19339621, b: 0.8268639, a: 0}
+  - {r: 0.11598255, g: 0.1013261, b: 0.6509434, a: 0}
+  - {r: 0.085751146, g: 0.4433962, b: 0.13597737, a: 0}
+  - {r: 0.509434, g: 0.11774654, b: 0.11774654, a: 0}
 --- !u!114 &1804463318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,6 +611,81 @@ MonoBehaviour:
   - mendiane
   - phiras
   - thystame
+--- !u!114 &1804463319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804463315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f8bb817314be7f43b2959755dad7be4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  map: {fileID: 1647771370}
+  playerPrefab: {fileID: 4225438133984329867, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+--- !u!1001 &2000956157
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763302614454348716, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4073605201695298972, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4225438133984329867, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7c24699a4be8e2344b5cef6428f07a4c, type: 3}
 --- !u!1 &2085113801
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,7 +26,7 @@ public class PacketManager : MonoBehaviour
         }
     }
 
-    public bool ArgsAreInt(string[] args)
+    public static bool ArgsAreInt(string[] args)
     {
         int dummy;
 

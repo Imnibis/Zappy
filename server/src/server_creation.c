@@ -35,7 +35,7 @@ void set_newclient(server_t *s, int *sock)
     go_previous(s);
 }
 
-void init_server(server_t *s, map_t *m)
+void init_server(server_t *s, map_t *m, server_config_t *si)
 {
     int max_fd = s->sockid;
     int nw;
@@ -45,6 +45,7 @@ void init_server(server_t *s, map_t *m)
     socklen_t ads = sizeof(adr);
     char *str = NULL;
 
+    gui_fd = 0;
     init_clients(s);
     while (1) {
         set_rfd(s, &max_fd, &rfd, &wfd);
@@ -63,8 +64,17 @@ void init_server(server_t *s, map_t *m)
                     FD_CLR(s->players->fd, &rfd);
                     FD_CLR(s->players->fd, &wfd);
                 } else {
-                    if (strcmp(str, "GRAPHIC") == 0)
+                    if (s->players->type != ANY)
+                        command_handling(s, str);
+                    if (strcmp(str, "GRAPHIC") == 0 && s->players->type == ANY) {
+                        s->players->type = CLIENT;
+                        gui_fd = s->players->fd;
                         send_map_gui(s, m);
+                    }
+                    if (team_exists(si, str) == 0 && s->players->type == ANY) {
+                        s->players->type = AI;
+                        dprintf(s->players->fd, "%d\n%d %d\n", s->cli_max - s->nb_cli, m->width, m->height);
+                    }
                     printf("%s\n", str);
                 }
             }

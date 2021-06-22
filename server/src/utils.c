@@ -53,3 +53,16 @@ void setname(char **args, int index, server_config_t *config)
         index++;
     }
 }
+
+int cmd_done(struct exec tab[])
+{
+    int i = 0;
+
+    while (tab[i].flag != 0) {
+        if (tab[i].executed != 1)
+            return(84);
+        i++;
+    }
+
+    return 0;
+}

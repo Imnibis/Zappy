@@ -9,7 +9,7 @@
 
 
 struct exec tab[] = {
-    {'p', setport}, {'x', setwidth}, {'y', setheight}, {'c', setclient}, {'f', setfreq}, {0, }
+    {'p', setport, 0}, {'x', setwidth, 0}, {'y', setheight, 0}, {'c', setclient, 0}, {'f', setfreq, 0}, {0, }
 };
 
 int setheight(const char *height, server_config_t *config)
@@ -57,19 +57,19 @@ int setport(const char *port, server_config_t *config)
     return 0;
 }
 
-int handling_argument(int ac, char **argv, server_config_t *config)
+void handling_argument(int ac, char **argv, server_config_t *config)
 {
     int isError = 0;
     int p = 0;
 
-    if (ac < 8)
-        return 84;
-    for (int i = 1; argv[i]; i++) {
+    for (int i = 1; argv[i + 1]; i++) {
         if ((i = find_next_cmd(i, argv, ac)) == 0)
-            return 0;
+            break;
         while (tab[p].flag != 0) {
-            if (tab[p].flag == argv[i][1])
+            if (tab[p].flag == argv[i][1]) {
                 isError = tab[p].fct(argv[i + 1], config);
+                tab[p].executed = 1;
+            }
             if (isError == 84)
                 exit(84);
             p++;
@@ -78,7 +78,8 @@ int handling_argument(int ac, char **argv, server_config_t *config)
             setname(argv, i + 1, config);
         p = 0;
     }
-    return 0;
+    if (cmd_done(&tab) == 84)
+        exit(84);
 }
 
 int find_next_cmd(int index, char **args, int ac)

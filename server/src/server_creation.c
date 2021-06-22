@@ -45,7 +45,7 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
     socklen_t ads = sizeof(adr);
     char *str = NULL;
 
-    gui_fd = 0;
+    s->gui_fd = 0;
     init_clients(s);
     while (1) {
         set_rfd(s, &max_fd, &rfd, &wfd);
@@ -68,7 +68,7 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
                         command_handling(s, str);
                     if (strcmp(str, "GRAPHIC") == 0 && s->players->type == ANY) {
                         s->players->type = CLIENT;
-                        gui_fd = s->players->fd;
+                        s->gui_fd = s->players->fd;
                         send_map_gui(s, m);
                     }
                     if (team_exists(si, str) == 0 && s->players->type == ANY) {

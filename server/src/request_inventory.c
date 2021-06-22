@@ -39,7 +39,7 @@ void take(server_t *s, map_t *m, int re)
             if (m->tiles->re[re] > 0) {
                 s->players->inventory[re] += 1;
                 dprintf(s->players->fd, "ok\n");
-                dprintf(gui_fd, "pgt %d %d\n", s->players->pos, re);
+                dprintf(s->gui_fd, "pgt %d %d\n", s->players->pos, re);
             } else
                 dprintf(s->players->fd, "ko\n");
         }

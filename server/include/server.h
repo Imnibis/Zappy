@@ -66,14 +66,13 @@ typedef struct player_s {
 typedef struct server_s {
     int sockid;
     int port;
+    int gui_fd;
     struct sockaddr_in serv;
     socklen_t size;
     int nb_cli;
     int cli_max;
     player_t *players;
 } server_t;
-
-int gui_fd;
 
 void go_previous(server_t *s);
 void init_clients(server_t *s);

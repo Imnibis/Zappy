@@ -7,7 +7,6 @@
 
 #include "config.h"
 
-
 struct exec tab[] = {
     {'p', setport, 0}, {'x', setwidth, 0}, {'y', setheight, 0}, {'c', setclient, 0}, {'f', setfreq, 0}, {0, }
 };
@@ -78,8 +77,7 @@ void handling_argument(int ac, char **argv, server_config_t *config)
             setname(argv, i + 1, config);
         p = 0;
     }
-    if (cmd_done(&tab) == 84)
-        exit(84);
+    cmd_done(&tab);
 }
 
 int find_next_cmd(int index, char **args, int ac)

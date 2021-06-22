@@ -36,6 +36,6 @@ int setheight(const char *height, server_config_t *config);
 int setclient(const char *nb, server_config_t *config);
 int setfreq(const char *freq, server_config_t *config);
 void setname(char **args, int index, server_config_t *config);
-int cmd_done(struct exec tab[]);
+void cmd_done(struct exec tab[]);
 
 #endif // !PARSER_SERVER

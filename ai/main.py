@@ -16,6 +16,26 @@ class Player():
         pin = [0, 0, 0, 0, 0, 0, 0] # player inventory
         tna =  list()               # name of all the teams
 
+class Socket():
+    def __init__(self) -> None:
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    def connect(self, host:str, port:int) -> None:
+        self.sock.connect((host, port))
+
+    def send(self, msg:str) -> None:
+        self.sock.send(msg.encode())
+
+    def receive(self) -> str:
+        msg = str('')
+        while (len(msg) < 100):
+            chunk = self.sock.recv(100 - len(msg))
+            if chunk.find(10) != -1:
+                msg = msg + str(chunk)
+                return msg
+        msg = msg + chunk
+        return msg
+
 class Client():
     def __init__(self) -> None:
         self.port = None
@@ -49,6 +69,7 @@ class Client():
 
 def main():
     client = Client()
+    sock = Socket()
 
 def helper():
     stdout.write("USAGE:\t./zappy_ai -p port -n name -h machine\n"

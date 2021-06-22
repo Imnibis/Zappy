@@ -39,6 +39,6 @@ int main(int ac, char **argv)
         return 84;
     map_t *m = malloc(sizeof(map_t));
     map(m, server_info.height, server_info.width);
-    init_server(s, m);
+    init_server(s, m, &server_info);
     return 0;
 }

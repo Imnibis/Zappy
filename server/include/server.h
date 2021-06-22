@@ -31,6 +31,22 @@
 #include "map.h"
 #include "config.h"
 
+typedef enum type_s
+{
+    ANY = 0,
+    AI = 1,
+    CLIENT = 2
+} type_t;
+
+typedef enum dir_s
+{
+    NONE = 0,
+    NORTH = 1,
+    EAST = 2,
+    SOUTH = 3,
+    WEST = 4
+} dir_t;
+
 typedef struct player_s player_t;
 
 typedef struct player_s {
@@ -41,6 +57,8 @@ typedef struct player_s {
     bool incantation;
     int inventory[7];
     int pos;
+    dir_t dir;
+    type_t type;
     player_t *next;
     player_t *prev;
 } player_t;
@@ -55,14 +73,30 @@ typedef struct server_s {
     player_t *players;
 } server_t;
 
+int gui_fd;
+
 void go_previous(server_t *s);
 void init_clients(server_t *s);
 int create_server(server_t *s, server_config_t *info);
 int serv_attribution(server_t *s);
-void init_server(server_t *s, map_t *m);
+void init_server(server_t *s, map_t *m, server_config_t *si);
 char *get_next_line(int fd);
-void request_inventory(server_t *s);
 void map(map_t *m, int height, int width);
 void send_map_gui(server_t *s, map_t *m);
 void init_map(map_t *map, int height, int width);
+void command_handling(server_t *s, char *command);
+int team_exists(server_config_t *s, char *team);
+void request_inventory(server_t *s, map_t *m, int re);
+void forward(server_t *s, map_t *m, int re);
+void left(server_t *s, map_t *m, int re);
+void right(server_t *s, map_t *m, int re);
+void look(server_t *s,  map_t *m, int re);
+void broadcast(server_t *s,  map_t *m, int re);
+void connect_nbr(server_t *s,  map_t *m, int re);
+void forked(server_t *s,  map_t *m, int re);
+void eject(server_t *s,  map_t *m, int re);
+void take(server_t *s,  map_t *m, int re);
+void set(server_t *s,  map_t *m, int re);
+void incantation(server_t *s,  map_t *m, int re);
+typedef void (*ai_cmd)(server_t *s, map_t *m, int re);
 #endif /* !SERVER_H_ */

@@ -129,7 +129,7 @@ public class Map : MonoBehaviour
         return new Vector3(mapPos.x - halfSize.x + 0.5f, height, mapPos.y - halfSize.y + 0.5f);
     }
 
-    public Quaternion OrientationToQuaternion(Orientation or)
+    public static Quaternion OrientationToQuaternion(Orientation or)
     {
         Vector3[] forwardVector = new Vector3[] {
             new Vector3(0, 0, -1), new Vector3(0, 0, -1),

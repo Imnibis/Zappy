@@ -12,12 +12,32 @@ public class Player : MonoBehaviour
 
     [Header("Settings")]
     public int HDRIntensity = 2;
+    public PlayerManager playerManager;
     public Light light;
     public MeshRenderer renderer;
+    public Canvas canvas;
+    public TextBubble textBubble;
+
+    public override string ToString()
+    {
+        return "<color=#" + ColorUtility.ToHtmlStringRGB(team.color) +
+            ">Player #" + id + "</color>";
+    }
 
     private void Awake()
     {
         inventory = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
+    }
+
+    public void Say(string message)
+    {
+        textBubble.ShowText(message);
+        playerManager.chatbox.PlayerSay(this, message);
+    }
+
+    public void SetWorldCamera(Camera camera)
+    {
+        canvas.worldCamera = camera;
     }
 
     public void SetColor(Color color)

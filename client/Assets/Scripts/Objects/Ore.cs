@@ -5,6 +5,7 @@ using UnityEngine;
 public class Ore : MonoBehaviour
 {
     public List<Resource> resources;
+    public int[] quantities;
 
     public void ShowResources(Dictionary<string, int> resourceQuantities)
     {
@@ -14,5 +15,10 @@ public class Ore : MonoBehaviour
                 quantity != 0) resource.Show();
             else resource.Hide();
         }
+    }
+    
+    public void GetResource(string resource)
+    {
+        
     }
 }

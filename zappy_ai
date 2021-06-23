@@ -1,0 +1,2 @@
+#!/bin/sh
+./ai/testing/python/Main.py $@

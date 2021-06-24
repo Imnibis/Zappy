@@ -36,7 +36,8 @@ void ejected(server_t *s, map_t *m, dir_t dir)
     dprintf(s->gui_fd, "ppo %d %d %d %d\n", s->players->pos, s->players->x,
     s->players->y, s->players->dir);
 }
-void eject(server_t *s, map_t *m, __attribute__((unused))int re)
+
+void eject(server_t *s, map_t *m, __attribute__((unused))char *elem)
 {
     int pos = s->players->pos;
     dir_t dir = s->players->dir;
@@ -48,7 +49,7 @@ void eject(server_t *s, map_t *m, __attribute__((unused))int re)
     for (; s->players->next != NULL; s->players = s->players->next) {
         if (s->players->x == x && s->players->y == y && s->players->pos != pos) {
             dprintf(s->players->fd, "eject: %d\n", dir);
-            eject(s, m, dir);
+            ejected(s, m, dir);
             found = true;
         }
     }

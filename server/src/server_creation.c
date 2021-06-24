@@ -85,6 +85,7 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
             }
         }
         go_previous(s);
+        bzero(&str, sizeof(str));
         // free(str);
     }
 }

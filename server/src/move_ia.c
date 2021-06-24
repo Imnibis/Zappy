@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-void forward(server_t *s, map_t *m, __attribute__((unused))int re)
+void forward(server_t *s, map_t *m, __attribute__((unused))char *elem)
 {
     if (s->players->dir == SOUTH) {
         if (s->players->y - 1 < 0)
@@ -36,7 +36,7 @@ void forward(server_t *s, map_t *m, __attribute__((unused))int re)
     dprintf(s->players->fd, "ok\n");
 }
 
-void right(server_t *s, __attribute__((unused))map_t *m, __attribute__((unused)) int re)
+void right(server_t *s, __attribute__((unused))map_t *m, __attribute__((unused))char *elem)
 {
         switch (s->players->dir) {
         case EAST:
@@ -59,7 +59,7 @@ void right(server_t *s, __attribute__((unused))map_t *m, __attribute__((unused))
     dprintf(s->players->fd, "ok\n");
 }
 
-void left(server_t *s, __attribute__((unused))map_t *m, __attribute__((unused))int re)
+void left(server_t *s, __attribute__((unused))map_t *m, __attribute__((unused))char *elem)
 {
     switch (s->players->dir) {
         case EAST:

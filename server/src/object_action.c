@@ -7,8 +7,29 @@
 
 #include "server.h"
 
-void take(server_t *s, map_t *m, int re)
+int get_elem(char *elem)
 {
+    if (strcmp(elem, "food") == 0)
+        return 0;
+    if (strcmp(elem, "linemate") == 0)
+        return 1;
+    if (strcmp(elem, "deraumere") == 0)
+        return 2;
+    if (strcmp(elem, "sibur") == 0)
+        return 3;
+    if (strcmp(elem, "mendiane") == 0)
+        return 4;
+    if (strcmp(elem, "phiras") == 0)
+        return 5;
+    if (strcmp(elem, "thystame") == 0)
+        return 6;
+    return 0;
+}
+
+void take(server_t *s, map_t *m, char *elem)
+{
+    int re = get_elem(elem);
+
     go_prev(m);
     for (; m->tiles->next != NULL; m->tiles = m->tiles->next) {
         if (m->tiles->x == s->players->x && m->tiles->y) {
@@ -24,8 +45,10 @@ void take(server_t *s, map_t *m, int re)
     go_prev(m);
 }
 
-void set(__attribute__((unused))server_t *s, __attribute__((unused)) map_t *m, __attribute__((unused))int re)
+void set(server_t *s, map_t *m, char *elem)
 {
+    int re = get_elem(elem);
+
     go_prev(m);
     for (; m->tiles->next != NULL; m->tiles = m->tiles->next) {
         if (m->tiles->x == s->players->x && m->tiles->y) {

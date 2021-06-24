@@ -6,6 +6,7 @@
 */
 
 #include "server.h"
+
 void print_map(map_t *map);
 int print_help()
 {

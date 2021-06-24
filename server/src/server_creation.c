@@ -46,6 +46,7 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
     char *str = NULL;
 
     s->gui_fd = 0;
+    srand(time(NULL));
     init_clients(s);
     while (1) {
         set_rfd(s, &max_fd, &rfd, &wfd);
@@ -65,7 +66,7 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
                     FD_CLR(s->players->fd, &wfd);
                 } else {
                     if (s->players->type != ANY)
-                        command_handling(s, str);
+                        command_handling(s, m, str);
                     if (strcmp(str, "GRAPHIC") == 0 && s->players->type == ANY) {
                         s->players->type = CLIENT;
                         s->gui_fd = s->players->fd;
@@ -73,6 +74,10 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
                     }
                     if (team_exists(si, str) == 0 && s->players->type == ANY) {
                         s->players->type = AI;
+                        printf("new ai\n");
+                        s->players->x = rand() % m->width;
+                        s->players->y = rand() % m->height;
+                        dprintf(s->gui_fd, "pnw %d %d %d %d 0 bite\n", s->players->pos, s->players->x, s->players->y, s->players->dir);
                         dprintf(s->players->fd, "%d\n%d %d\n", s->cli_max - s->nb_cli, m->width, m->height);
                     }
                     printf("%s\n", str);
@@ -80,7 +85,7 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
             }
         }
         go_previous(s);
-        free(str);
+        // free(str);
     }
 }
 

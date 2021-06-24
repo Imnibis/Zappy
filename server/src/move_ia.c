@@ -10,15 +10,15 @@
 void forward(server_t *s, map_t *m, __attribute__((unused))int re)
 {
     if (s->players->dir == SOUTH) {
-        if (s->players->y + 1 > m->height - 1)
+        if (s->players->y - 1 < 0)
             s->players->y = m->height - 1;
         else
-            s->players->y += 1;
+            s->players->y -= 1;
     } else if (s->players->dir == NORTH) {
-        if (s->players->y - 1 < 0)
+        if (s->players->y + 1 > m->height - 1)
             s->players->y = 0;
         else
-            s->players->y -= 1;
+            s->players->y += 1;
     }
     if (s->players->dir == EAST) {
         if (s->players->x + 1 > m->width - 1)
@@ -31,6 +31,9 @@ void forward(server_t *s, map_t *m, __attribute__((unused))int re)
         else
             s->players->x -= 1;
     }
+    dprintf(s->gui_fd, "ppo %d %d %d %d\n", s->players->pos, s->players->x,
+    s->players->y, s->players->dir);
+    dprintf(s->players->fd, "ok\n");
 }
 
 void right(server_t *s, __attribute__((unused))map_t *m, __attribute__((unused)) int re)

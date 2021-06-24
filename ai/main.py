@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2020
+## B-YEP-410-LYN-4-1-zappy-arthur1.perrot [WSL: Debian]
+## File description:
+## main.py
+##
+
 from sys import argv as av
 from sys import stderr, stdout
 from sys import exit as xit
@@ -101,9 +108,6 @@ def main():
     sock = Socket()
     map_info = Map()
     connection(cli, sock, map_info)
-
-
-
 
 def helper():
     stdout.write("USAGE:\t./zappy_ai -p port -n name -h machine\n"

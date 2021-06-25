@@ -7,6 +7,7 @@ from Client import Client
 from Map import Map
 from Player import Player
 from Socket import Socket
+from AI import loop
 
 def connection(cli:Client, sock:Socket, map_info:Map) -> None:
     sock.connect(cli.machine, cli.port)
@@ -37,6 +38,7 @@ def main() -> None:
     sock = Socket()
     map_info = Map()
     connection(cli, sock, map_info)
+    loop(cli, sock, map_info)
 
 def helper():
     stdout.write("USAGE:\t./zappy_ai -p port -n name -h machine\n"

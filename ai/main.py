@@ -8,6 +8,7 @@ from Map import Map
 from Player import Player
 from Socket import Socket
 from AI import loop
+from os import fork
 
 def connection(cli:Client, sock:Socket, map_info:Map) -> None:
     sock.connect(cli.machine, cli.port)
@@ -59,3 +60,13 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         xit(0)
+
+def forkai(sock:Socket):
+    sock.send("Connect_nbr\n")
+    if (sock.receive() != "0\n"):
+        sock.send("Fork\n")
+    #AI of the fork
+    child = os.fork()
+    if (child == 0):
+        forkai(sock)
+    

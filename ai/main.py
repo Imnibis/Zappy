@@ -59,14 +59,4 @@ if __name__ == '__main__':
         cmd_checkout()
         main()
     except KeyboardInterrupt:
-        xit(0)
-
-def forkai(sock:Socket):
-    sock.send("Connect_nbr\n")
-    if (sock.receive() != "0\n"):
-        sock.send("Fork\n")
-    #AI of the fork
-    child = os.fork()
-    if (child == 0):
-        forkai(sock)
-    
+        xit(0)   

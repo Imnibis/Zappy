@@ -14,6 +14,14 @@ class Player():
                             [1, 2, 3, 0, 1, 0],
                             [2, 2, 2, 2, 2, 1]]
         self.requiredPlayers = [0, 1, 2, 2, 4, 4, 6, 6]
+        self.stones = ["linemate", "deraumere", "sibur", "mendiane", "phiras" , "thystame"]
+
+    def take_obj(self, sock:Socket, obj:str) -> None:
+        sock.send("Take " + obj + '\n')
+        print(sock.receive())
+
+    def go_to(self, sock:Socket, tile:int) -> None:
+        return -1
 
     def update_pinv(self, sock:Socket) -> None:
         sock.send("Inventory\n")
@@ -34,7 +42,7 @@ class Player():
                 pass
         return True
 
-    def broadcast_message(self, sock:Socket, message: str) -> None:
+    def broadcast_message(sock:Socket, message: str) -> None:
         sock.send("Broadcast " + message + '\n')
 
     def update_lvl(self) -> None:

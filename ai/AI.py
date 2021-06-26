@@ -40,4 +40,4 @@ def forkAI(sock:Socket):
     #AI of the fork
     child = os.fork()
     if (child == 0):
-        forkai(sock)
+        forkAI(sock)

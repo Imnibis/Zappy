@@ -10,14 +10,17 @@ public class PlayerManager : MonoBehaviour
     public Chatbox chatbox;
     public GameObject playerPrefab;
     public GameObject incantationPrefab;
+    public GameObject pickupHUDPrefab;
     public Dictionary<int, Player> players = new Dictionary<int, Player>();
     public Dictionary<Vector2, List<Incantation>> incantations = new Dictionary<Vector2, List<Incantation>>();
 
     GameManager gameManager;
+    ResourceManager resourceManager;
 
     private void Start()
     {
         gameManager = GetComponent<GameManager>();
+        resourceManager = GetComponent<ResourceManager>();
     }
 
     public bool HandlePlayerPacketError(string[] args, string packetName, int argNb, bool variableArgs = false)
@@ -57,7 +60,9 @@ public class PlayerManager : MonoBehaviour
         player.id = int.Parse(args[0]);
         player.level = level;
         player.team = gameManager.teams[args[5]];
+        player.gameManager = gameManager;
         player.playerManager = this;
+        player.mapPosition = mapPos;
         player.SetColor(player.team.color);
         player.SetWorldCamera(camera);
         players.Add(player.id, player);
@@ -94,6 +99,7 @@ public class PlayerManager : MonoBehaviour
         Orientation orientation = (Orientation) int.Parse(args[3]);
         player.transform.position = map.MapToWorldPos(mapPos, 0);
         player.transform.rotation = Map.OrientationToQuaternion(orientation);
+        player.mapPosition = mapPos;
     }
 
     public void HandlePlayerLevelPacket(string[] args)
@@ -122,8 +128,8 @@ public class PlayerManager : MonoBehaviour
             return;
         int id = int.Parse(args[0]);
         Player player = players[id];
-        chatbox.SendGameMessage(player.ToString() + " got kicked out");
-        RemovePlayer(id);
+        chatbox.SendServerMessage(player.ToString() + " got kicked out");
+        //RemovePlayer(id);
     }
 
     public void HandlePlayerBroadcastPacket(string[] args)
@@ -221,11 +227,47 @@ public class PlayerManager : MonoBehaviour
         Destroy(incantation.gameObject);
     }
 
+    public void HandlePlayerLayEggPacket(string[] args)
+    {
+        if (!HandlePlayerPacketError(args, "HandlePlayerLayEggPacket", 1))
+            return;
+        Player player = players[int.Parse(args[0])];
+        player.LayEgg();
+        chatbox.SendGameMessage(player.ToString() + " laid an egg!");
+    }
+
     public void HandlePlayerDropResourcePacket(string[] args)
     {
         if (!HandlePlayerPacketError(args, "HandlePlayerDropResourcePacket", 2))
             return;
-        // TODO: that
+        Player player = players[int.Parse(args[0])];
+        int resourceID = int.Parse(args[1]);
+        Vector2 mapPos = player.mapPosition;
+        if (player.inventory[resourceID] == 0) return;
+        PickupHUD pickupHUD = player.GetPickupHUD();
+        pickupHUD.quantity = -1;
+        pickupHUD.resourceName = resourceManager.resources[resourceID];
+        pickupHUD.Display();
+        map.GetOre(mapPos).AddResource(resourceID, 1);
+        player.inventory[resourceID] -= 1;
+    }
+
+    public void HandlePlayerGatherResourcePacket(string[] args)
+    {
+        if (!HandlePlayerPacketError(args, "HandlePlayerGatherResourcePacket", 2))
+            return;
+        Player player = players[int.Parse(args[0])];
+        int resourceID = int.Parse(args[1]);
+        Vector2 mapPos = player.mapPosition;
+        Ore ore = map.GetOre(mapPos);
+        int quantity = ore.GetResourceQuantity(resourceID);
+        if (quantity == 0) return;
+        PickupHUD pickupHUD = player.GetPickupHUD();
+        pickupHUD.quantity = 1;
+        pickupHUD.resourceName = resourceManager.resources[resourceID];
+        pickupHUD.Display();
+        player.inventory[resourceID] += 1;
+        ore.AddResource(resourceID, -1);
     }
 
     public void HandlePlayerDeathPacket(string[] args)

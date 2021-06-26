@@ -20,6 +20,21 @@ public class Map : MonoBehaviour
         renderer = GetComponent<MeshRenderer>();
     }
 
+    public Ore GetOre(Vector2 mapPos)
+    {
+        if (!mapContent.ContainsKey(mapPos)) {
+            GameObject resourcePrefab = resourceManager.orePrefab;
+            if (resourcePrefab == null)
+                Debug.LogError("No resource prefab set");
+            GameObject resourceObject = Instantiate(resourcePrefab, transform);
+            Ore ore = resourceObject.GetComponent<Ore>();
+            resourceObject.transform.position = MapToWorldPos(mapPos, 0.5f);
+            ore.resourceManager = resourceManager;
+            mapContent.Add(mapPos, ore);
+        }
+        return mapContent[mapPos];
+    }
+
     public void HandleMapSizePacket(string[] args)
     {
         Vector2Int size;
@@ -40,7 +55,7 @@ public class Map : MonoBehaviour
     {
         Vector2 pos = new Vector2();
         int i = 0;
-        Dictionary<string, int> resourceQuantities = new Dictionary<string, int>();
+        List<int> resourceQuantities = new List<int>();
 
         if (!HandleTileContentPacketErrors(args)) return;
         foreach (string arg in args) {
@@ -49,25 +64,10 @@ public class Map : MonoBehaviour
             else if (i == 1)
                 pos.y = int.Parse(arg);
             else
-                resourceQuantities.Add(resourceManager.GetResource(i - 2), int.Parse(arg));
+                resourceQuantities.Add(int.Parse(arg));
             i++;
         }
-        if (resourceQuantities.Where(kvp => kvp.Value != 0).Count() == 0) {
-            if (mapContent.ContainsKey(pos)) {
-                Destroy(mapContent[pos].gameObject);
-                mapContent.Remove(pos);
-            }
-            return;
-        }
-        if (!mapContent.ContainsKey(pos)) {
-            GameObject resourcePrefab = resourceManager.orePrefab;
-            if (resourcePrefab == null)
-                Debug.LogError("No resource prefab set");
-            GameObject resourceObject = Instantiate(resourcePrefab, transform);
-            resourceObject.transform.position = MapToWorldPos(pos, 0.5f);
-            mapContent.Add(pos, resourceObject.GetComponent<Ore>());
-        }
-        mapContent[pos].ShowResources(resourceQuantities);
+        GetOre(pos).SetQuantities(resourceQuantities.ToArray());
     }
 
     bool HandleTileContentPacketErrors(string[] args)
@@ -133,8 +133,8 @@ public class Map : MonoBehaviour
     {
         Vector3[] forwardVector = new Vector3[] {
             new Vector3(0, 0, -1), new Vector3(0, 0, -1),
-            new Vector3(1, 0, 0), new Vector3(0, 0, 1),
-            new Vector3(-1, 0, 0)
+            new Vector3(-1, 0, 0), new Vector3(0, 0, 1),
+            new Vector3(1, 0, 0)
         };
 
         return Quaternion.LookRotation(forwardVector[(int)or], new Vector3(0, 1, 0));

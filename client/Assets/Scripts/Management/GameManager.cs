@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public List<Color> teamColors = new List<Color>();
     public Dictionary<string, Team> teams = new Dictionary<string, Team>();
-    int timeUnit = 100;
+    public int timeUnit = 100;
 
     public void HandleTimeUnitPacket(string[] args)
     {

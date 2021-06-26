@@ -2,7 +2,7 @@ from Client import Client
 from Map import Map
 from Player import Player
 from Socket import Socket
-import os
+from os import fork
 
 def get_tiles_content(sock:Socket) -> list:
     sock.send("Look\n")

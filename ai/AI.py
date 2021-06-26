@@ -33,7 +33,7 @@ def search_stone(tiles:list, stone:str) -> int:
 def loop(cli:Client, sock:Socket, map_info:Map) -> None:
     ply = Player()
 
-def forkai(sock:Socket):
+def forkAI(sock:Socket):
     sock.send("Connect_nbr\n")
     if (sock.receive() != "0\n"):
         sock.send("Fork\n")

@@ -14,7 +14,7 @@ class Player():
                             [1, 2, 3, 0, 1, 0],
                             [2, 2, 2, 2, 2, 1]]
         self.requiredPlayers = [0, 1, 2, 2, 4, 4, 6, 6]
-        self.stones = ["linemate", "deraumere", "sibur", "mendiane", "phiras" , "thystame"]
+        self.stones = ["linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"]
 
     def take_obj(self, sock:Socket, obj:str) -> None:
         sock.send("Take " + obj + '\n')

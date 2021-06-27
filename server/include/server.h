@@ -117,12 +117,12 @@ void forward(server_t *s, map_t *m);
 void left(server_t *s);
 void right(server_t *s);
 void broadcast(server_t *s,  map_t *m, char *elem);
-void connect_nbr(server_t *s,  map_t *m, char *elem);
-void forked(server_t *s,  map_t *m, char *elem);
-void eject(server_t *s,  map_t *m, char *elem);
+void connect_nbr(server_t *s);
+void forked(server_t *s);
+void eject(server_t *s,  map_t *m);
 void take(server_t *s,  map_t *m);
 void set(server_t *s,  map_t *m);
-void incantation(server_t *s,  map_t *m, char *elem);
+void incantation(server_t *s);
 void command_handling(server_t *s, char *command);
 int team_exists(server_config_t *s, char *team);
 /* CHAINED UTILS */

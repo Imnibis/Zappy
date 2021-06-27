@@ -10,7 +10,7 @@
 void cmd_ai(server_t *s, char *command)
 {
     action_t *head = s->acs;
-    char *ai_cmds[] = {"Connect", "UNUSED", "Inventory", "Forward", "Right", "Left", "Look", "Eject", "Take", "Set", "UNUSED", "Fork", "UNUSED", "Incantation", NULL};
+    char *ai_cmds[] = {"Connect_nbr", "UNUSED", "Inventory", "Forward", "Right", "Left", "Look", "Eject", "Take", "Set", "UNUSED", "Fork", "UNUSED", "Incantation", NULL};
     char **tab = str_warray(command, ' ');
 
     for (int i = 0; ai_cmds[i]; i++) {

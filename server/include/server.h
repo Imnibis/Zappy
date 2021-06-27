@@ -31,6 +31,36 @@
 #include "map.h"
 #include "config.h"
 
+typedef enum duration_s
+{
+    CONNECT = 0,
+    DEATH = 1,
+    INVENTORY = 2,
+    FORWARD = 3,
+    TURN = 4,
+    LOOK = 5,
+    EJECT = 6,
+    TAKE = 7,
+    SET = 8,
+    REFILL = 9,
+    FORK = 10,
+    FOOD = 11,
+    INCANTATION = 12
+} duration_t;
+
+typedef struct action_s action_t;
+typedef struct player_s player_t;
+
+typedef struct action_s
+{
+    clock_t begin;
+    duration_t dur;
+    player_t *player;
+    char *elem;
+    action_t *prev;
+    action_t *next;
+} action_t;
+
 typedef enum type_s
 {
     ANY = 0,
@@ -47,8 +77,6 @@ typedef enum dir_s
     WEST = 4
 } dir_t;
 
-typedef struct player_s player_t;
-
 typedef struct player_s {
     int x;
     int y;
@@ -57,6 +85,7 @@ typedef struct player_s {
     bool incantation;
     int inventory[7];
     int pos;
+    char *team;
     dir_t dir;
     type_t type;
     player_t *next;
@@ -71,6 +100,8 @@ typedef struct server_s {
     socklen_t size;
     int nb_cli;
     int cli_max;
+    int freq;
+    action_t *acs;
     player_t *players;
 } server_t;
 
@@ -100,4 +131,6 @@ void set(server_t *s,  map_t *m, char *elem);
 void incantation(server_t *s,  map_t *m, char *elem);
 typedef void (*ai_cmd)(server_t *s, map_t *m, char *elem);
 char **str_warray(char const *str, char f);
+int get_durations(duration_t dur);
+void actions(server_t *s, map_t *m);
 #endif /* !SERVER_H_ */

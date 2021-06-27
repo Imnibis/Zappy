@@ -7,6 +7,19 @@
 
 #include "server.h"
 
+void init_actions(server_t *s)
+{
+    s->acs = malloc(sizeof(action_t));
+    s->acs->prev = NULL;
+    s->acs->dur = REFILL;
+    s->acs->begin = clock();
+    s->acs->next = malloc(sizeof(action_t));
+    s->acs->next->prev = s->acs;
+    s->acs->next->next = NULL;
+    s->acs->next->dur = FOOD;
+    s->acs->next->begin = clock();
+}
+
 void init_clients(server_t *s)
 {
     s->players = malloc(sizeof(player_t));
@@ -26,4 +39,5 @@ void init_clients(server_t *s)
         s->players->pos = i;
     }
     go_previous(s);
+    init_actions(s);
 }

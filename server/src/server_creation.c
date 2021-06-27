@@ -44,14 +44,15 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
     struct sockaddr_in adr;
     socklen_t ads = sizeof(adr);
     char *str = NULL;
+    struct timeval tv = {0, 0};
 
     s->gui_fd = 0;
     srand(time(NULL));
     init_clients(s);
     while (1) {
+        actions(s, m);
         set_rfd(s, &max_fd, &rfd, &wfd);
-        if (select(max_fd + 1, &rfd, &wfd, NULL, 0x0) < 0)
-            break;
+        select(max_fd + 1, &rfd, &wfd, NULL, &tv);
         if (FD_ISSET(s->sockid, &rfd)) {
             if ((nw = accept(s->sockid, (struct sockaddr *)&adr, &ads)) < 0)
                 break;
@@ -77,6 +78,7 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
                         printf("new ai\n");
                         s->players->x = rand() % m->width;
                         s->players->y = rand() % m->height;
+                        s->players->team = strdup(str);
                         dprintf(s->gui_fd, "pnw %d %d %d %d 0 bite\n", s->players->pos, s->players->x, s->players->y, s->players->dir);
                         dprintf(s->players->fd, "%d\n%d %d\n", s->cli_max - s->nb_cli, m->width, m->height);
                     }

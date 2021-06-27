@@ -142,7 +142,7 @@ void looked(map_t *m, server_t *s)
     dprintf(s->players->fd, " ]\n");
 }
 
-void look(__attribute__((unused)) server_t *s, __attribute__((unused)) map_t *m, __attribute__((unused))char *elem)
+void look(__attribute__((unused)) server_t *s, map_t *m, __attribute__((unused))char *elem)
 {
     looked(m, s);
 }

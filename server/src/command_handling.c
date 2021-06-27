@@ -9,14 +9,26 @@
 
 void cmd_ai(server_t *s, map_t *m, char *command)
 {
-    char *ai_cmds[] = {"Forward", "Right", "Left", "Look", "Inventory", "Broadcast", "Connect_nbr", "Fork", "Eject", "Take", "Set", "Incantation", NULL};
-    ai_cmd cmds[] = {&forward, &right, &left, &look, &request_inventory, &broadcast, &connect_nbr, &forked, &eject, &take, &set, &incantation};
-    char **tab = str_warray(command, ' ');
+    action_t *head = s->acs;
 
-    for (int i = 0; ai_cmds[i]; i++) {
-        if (strcmp(tab[0], ai_cmds[i]) == 0)
-            cmds[i](s, m, tab[1]);
+    if (strcmp(command, "Look") == 0) {
+        for (; s->acs->next != NULL; s->acs = s->acs->next);
+        s->acs->next = malloc(sizeof(action_t));
+        s->acs->next->next = NULL;
+        s->acs->next->begin = clock();
+        s->acs->next->player = s->players;
+        s->acs->next->dur = LOOK;
+        s->acs->next->prev = s->acs;
+        s->acs = head;
     }
+    // char *ai_cmds[] = {"Forward", "Right", "Left", "Look", "Inventory", "Broadcast", "Connect_nbr", "Fork", "Eject", "Take", "Set", "Incantation", NULL};
+    // ai_cmd cmds[] = {&forward, &right, &left, &look, &request_inventory, &broadcast, &connect_nbr, &forked, &eject, &take, &set, &incantation};
+    // char **tab = str_warray(command, ' ');
+
+    // for (int i = 0; ai_cmds[i]; i++) {
+    //     if (strcmp(tab[0], ai_cmds[i]) == 0)
+    //         cmds[i](s, m, tab[1]);
+    // }
 }
 
 void command_handling(server_t *s, map_t *m,  char *command)

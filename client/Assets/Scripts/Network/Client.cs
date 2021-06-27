@@ -18,6 +18,14 @@ public class Client : MonoBehaviour
     private void Start()
     {
         packetManager = GetComponent<PacketManager>();
+        string[] args = System.Environment.GetCommandLineArgs();
+        for (int i = 0; i < args.Length; i++) {
+            if (args[i] == "--host" && i != args.Length - 1)
+                ip = args[++i];
+            else if (args[i] == "--port" && i != args.Length - 1 &&
+                int.TryParse(args[i + 1], out port))
+                i++;
+        }
         Listen();
     }
 

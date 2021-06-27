@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+import sys
+import platform
+import os
+from enum import Enum
+
+def show_help():
+    print("USAGE:  ./zappy_gui -p port -h machine")
+    print("        port    is the port number")
+    print("        machine is the name of the machine; localhost by default")
+
+def parse_args():
+    ip = "localhost"
+    port = None
+
+    for i in range(len(sys.argv)):
+        if sys.argv[i] == "-help":
+            show_help()
+            sys.exit(0)
+        if sys.argv[i] == "-h" and i != len(sys.argv) - 1 and not sys.argv[i + 1].startswith("-"):
+            ip = sys.argv[i + 1]
+        elif sys.argv[i] == "-h":
+            show_help()
+            sys.exit(84)
+        if sys.argv[i] == "-p" and i != len(sys.argv) - 1 and sys.argv[i + 1].isnumeric():
+            port = int(sys.argv[i + 1])
+        elif sys.argv[i] == "-p":
+            show_help()
+            sys.exit(84)
+    return (ip, port)
+
+def main():
+    ip, port = parse_args()
+    program_path = "./client/Releases/LINUX/zappy_gui"
+
+    if port == None:
+        show_help()
+        sys.exit(84)
+    if platform.system == "Windows" or "microsoft" in platform.uname()[2].lower():
+        program_path = "./client/Releases/WINDOWS/zappy_gui.exe"
+    os.system("{0} --host {1} --port {2}".format(program_path, ip, port))
+
+main()

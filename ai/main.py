@@ -10,12 +10,12 @@ from Socket import Socket
 from AI import loop
 from os import fork
 
-def connection(cli:Client, sock:Socket, map_info:Map) -> None:
+def connection(cli:Client, sock:Socket, map_info:Map, ply:Player) -> None:
     sock.connect(cli.machine, cli.port)
-    output = sock.receive()
+    output = sock.receive(ply)
     if (output == "WELCOME\n"):
         sock.send(cli.name + '\n')
-        output = sock.receive()
+        output = sock.receive(ply)
         splitted = output.split('\n')
         try:
             cli.can_connect = int(splitted[0])
@@ -36,10 +36,11 @@ def connection(cli:Client, sock:Socket, map_info:Map) -> None:
 
 def main() -> None:
     cli = Client()
+    ply = Player()
     sock = Socket()
     map_info = Map()
-    connection(cli, sock, map_info)
-    loop(cli, sock, map_info)
+    connection(cli, sock, map_info, ply)
+    loop(cli, sock, map_info, ply)
 
 def helper():
     stdout.write("USAGE:\t./zappy_ai -p port -n name -h machine\n"
@@ -59,4 +60,4 @@ if __name__ == '__main__':
         cmd_checkout()
         main()
     except KeyboardInterrupt:
-        xit(0)   
+        xit(0)

@@ -16,11 +16,17 @@ class Player():
         self.requiredPlayers = [0, 1, 2, 2, 4, 4, 6, 6]
         self.stones = ["linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"]
 
-    def take_obj(self, sock:Socket, obj:str) -> None:
-        sock.send("Take " + obj + '\n')
-        print(sock.receive())
+    def set_obj(self, sock:Socket, ply, obj:str) -> None:
+        sock.send("Set " + obj + '\n')
+        if (sock.receive(ply) == "dead"):
+            self.status = False
 
-    def go_to(self, sock:Socket, tile:int) -> None:
+    def take_obj(self, sock:Socket, ply, obj:str) -> None:
+        sock.send("Take " + obj + '\n')
+        if (sock.receive(ply) == "dead"):
+            self.status = False
+
+    def go_to(self, sock:Socket, ply, tile:int) -> None:
         for i in range(1, 9):
             tmin = i**2
             tmax = tmin + (i*2)
@@ -30,23 +36,29 @@ class Player():
             if tmin < tile < tmax:
                 for j in range(0, i):
                     sock.send("Forward\n")
-                    ###
-                    ###
-                    ### Do i need to wait for server response before sending another one ?
-                    ###
-                    ###
+                    sock.receive(ply)
                 if tile < center:
                     sock.send("Left\n")
+                    sock.receive(ply)
                     for l in range(0, center - tile):
                         sock.send("Forward\n")
+                        sock.receive(ply)
                 elif tile > center:
                     sock.send("Right\n")
+                    sock.receive(ply)
                     for m in range(0, tile - center):
                         sock.send("Forward\n")
+                        sock.receive(ply)
 
-    def update_pinv(self, sock:Socket) -> None:
+    def update_pinv(self, sock:Socket, ply) -> None:
         sock.send("Inventory\n")
-        output = sock.receive()
+        output = sock.receive(ply)
+        if (output == "ko\n"):
+            while output == "ko\n":
+                sock.send("Inventory\n")
+                output = sock.receive(ply)
+                print(output)
+        print(output)
         output = output[2:-2]
         output = output.split(", ")
         for i in range(len(output)):

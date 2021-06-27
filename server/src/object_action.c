@@ -42,6 +42,10 @@ void take(server_t *s, map_t *m)
                 s->players->inventory[re] += 1;
                 dprintf(s->players->fd, "ok\n");
                 dprintf(s->gui_fd, "pgt %d %d\n", s->players->pos, re);
+                dprintf(s->gui_fd, "bct %d %d", m->tiles->x, m->tiles->y);
+                for (int i = 0; i != 7; i++)
+                    dprintf(s->gui_fd, " %d", m->tiles->re[i]);
+                dprintf(s->gui_fd, "\n");
             } else
                 dprintf(s->players->fd, "ko\n");
             break;
@@ -66,6 +70,10 @@ void set(server_t *s, map_t *m)
                 s->players->inventory[re] -= 1;
                 dprintf(s->players->fd, "ok\n");
                 dprintf(s->gui_fd, "pdr %d %d\n", s->players->pos, re);
+                dprintf(s->gui_fd, "bct %d %d", m->tiles->x, m->tiles->y);
+                for (int i = 0; i != 7; i++)
+                    dprintf(s->gui_fd, " %d", m->tiles->re[i]);
+                dprintf(s->gui_fd, "\n");
             } else
                 dprintf(s->players->fd, "ko\n");
             break;

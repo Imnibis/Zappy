@@ -73,7 +73,7 @@ void actions(server_t *s, map_t *m)
                         if (s->players->type == AI) {
                             s->players->inventory[0] -= 1;
                             if (s->players->inventory[0] <= 0) {
-                                dprintf(s->players->fd, "Dead\n");
+                                dprintf(s->players->fd, "dead\n");
                                 dprintf(s->gui_fd, "pdi %d\n", s->players->pos);
                                 s->players->level = 0;
                                 close(s->players->fd);

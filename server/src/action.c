@@ -76,7 +76,8 @@ void actions(server_t *s, map_t *m)
                                 dprintf(s->players->fd, "dead\n");
                                 dprintf(s->gui_fd, "pdi %d\n", s->players->pos);
                                 s->players->level = 0;
-                                close(s->players->fd);
+                                if (s->players->fd != s->gui_fd)
+                                    close(s->players->fd);
                                 s->players->fd = 0;
                                 s->players->type = ANY;
                                 s->players->x = 0;
@@ -84,6 +85,7 @@ void actions(server_t *s, map_t *m)
                             }
                         }
                     }
+                    s->acs->begin = clock();
                 }
             }
         }

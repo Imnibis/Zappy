@@ -35,11 +35,18 @@ def connection(cli:Client, sock:Socket, map_info:Map, ply:Player) -> None:
         xit(84)
 
 def main() -> None:
-    cli = Client()
     ply = Player()
     sock = Socket()
     map_info = Map()
+    cli = Client()
     connection(cli, sock, map_info, ply)
+    sock.send("Connect_nbr\n")
+    clientnum = sock.receive()
+    clientnum = clientnum[:-1]
+    try:
+        cli.can_connect = int(clientnum)
+    except ValueError:
+        stderr.write(clientnum)
     loop(cli, sock, map_info, ply)
 
 def helper():

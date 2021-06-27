@@ -84,7 +84,7 @@ class Player():
         return str("")
 
     def check_requirement(self) -> bool:
-        inv = self.pin
+        inv = list(self.pin)
         inv.pop(0)
         for i in range(0, 6):
             if (self.requirement[self.lvl - 1] != inv):

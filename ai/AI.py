@@ -1,17 +1,10 @@
+from sys import stderr
 from Client import Client
 from Map import Map
 from Player import Player
 from Socket import Socket
-from subprocess import Popen
-from sys import argv as av
-
-def forkAI(sock:Socket, cli:Client) -> None:
-    sock.send("Connect_nbr\n")
-    if  sock.receive() != "0\n":
-        pass
-        # sock.send("Fork\n")
-        # if (sock.receive() == "ok\n"):
-        #     Popen(['python3', av[0], '-p', str(cli.port), '-h', cli.machine, '-n', cli.name])
+from os import fork, system
+import subprocess
 
 def get_tiles_content(sock:Socket, ply:Player) -> list:
     sock.send("Look\n")
@@ -36,6 +29,13 @@ def search_stone(tiles:list, stone:str) -> int:
                 return i + 1
     return -1
 
+def forkAI(sock:Socket, cli:Client, ply:Player) -> None:
+    if (cli.can_connect > 0):
+        sock.send("Fork\n")
+        if sock.receive() == "ok\n":
+            cli.can_connect -= 1
+            subprocess.run(["python3", "main.py", "-p", str(cli.port), "-n", cli.name, "-h", cli.machine])
+
 def loop(cli:Client, sock:Socket, map_info:Map, ply:Player) -> None:
     ply.update_pinv(sock)
     while ply.status == True:
@@ -53,14 +53,15 @@ def loop(cli:Client, sock:Socket, map_info:Map, ply:Player) -> None:
         else:
             stone = ply.needed_stone()
             tile = search_stone(tiles, stone)
-            print('couille')
             if tile != -1:
-                print('chatte')
                 ply.go_to(sock, tile)
-                print('carabistouille')
                 ply.take_obj(sock, stone)
-                print('ripmomspaghetti')
                 while (sock.receive() != "ko\n"):
                     ply.update_pinv(sock)
                     ply.take_obj(sock, stone)
-        forkAI(sock, cli)
+            else:
+                sock.send("Right\n")
+                sock.receive()
+                sock.send("Forward\n")
+                sock.receive()
+        forkAI(sock, cli, ply)

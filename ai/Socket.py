@@ -23,13 +23,11 @@ class Socket():
             if chunk.find(10) != -1:
                 msg += str(chunk, "utf-8")
                 if (msg == "dead\n"):
-                    stderr.write("dead")
                     self.sock.close()
                     xit(0)
                 return msg
         msg += str(chunk, "utf-8")
         if (msg == "dead\n"):
-            stderr.write("dead")
             self.sock.close()
             xit(0)
         return msg

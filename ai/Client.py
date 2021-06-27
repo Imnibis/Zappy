@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-##
-## EPITECH PROJECT, 2020
-## B-YEP-410-LYN-4-1-zappy-arthur1.perrot [WSL: Debian]
-## File description:
-## main.py
-##
-
 from sys import argv as av
 from sys import stderr
 from sys import exit as xit

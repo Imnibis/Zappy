@@ -8,7 +8,6 @@ from Map import Map
 from Player import Player
 from Socket import Socket
 from AI import loop
-from os import fork
 
 def connection(cli:Client, sock:Socket, map_info:Map, ply:Player) -> None:
     sock.connect(cli.machine, cli.port)

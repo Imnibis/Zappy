@@ -25,7 +25,11 @@ void broadcast(__attribute__((unused))server_t *s, __attribute__((unused)) map_t
     dprintf(s->players->fd, "ko\n");
 }
 
-void connect_nbr(__attribute__((unused))server_t *s, __attribute__((unused)) map_t *m, __attribute__((unused))char *elem)
+void connect_nbr(server_t *s)
 {
+    go_previous(s);
+    for (; s->players->next != NULL; s->players = s->players->next)
+        if (s->players->fd == s->acs->player->fd)
+            break;
     dprintf(s->players->fd, "%d\n", (s->cli_max - s->nb_cli) + 1);
 }

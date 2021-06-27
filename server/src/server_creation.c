@@ -30,6 +30,13 @@ void set_newclient(server_t *s, int *sock)
             break;
         }
     }
+    s->players->inventory[0] = 10;
+    s->players->inventory[1] = 0;
+    s->players->inventory[2] = 0;
+    s->players->inventory[3] = 0;
+    s->players->inventory[4] = 0;
+    s->players->inventory[5] = 0;
+    s->players->inventory[6] = 0;
     s->nb_cli += 1;
     dprintf(*sock, "WELCOME\n");
     go_previous(s);
@@ -79,8 +86,10 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
                         s->players->x = rand() % m->width;
                         s->players->y = rand() % m->height;
                         s->players->team = strdup(str);
-                        dprintf(s->gui_fd, "pnw %d %d %d %d 0 bite\n", s->players->pos, s->players->x, s->players->y, s->players->dir);
-                        dprintf(s->players->fd, "%d\n%d %d\n", s->cli_max - s->nb_cli, m->width, m->height);
+                        dprintf(s->gui_fd, "pnw %d %d %d %d 0 bite\n", s->players->pos,
+                        s->players->x, s->players->y, s->players->dir);
+                        dprintf(s->players->fd, "%d\n%d %d\n",
+                        s->cli_max - s->nb_cli, m->width, m->height);
                     }
                     printf("%s\n", str);
                 }

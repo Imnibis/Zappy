@@ -37,14 +37,22 @@ void ejected(server_t *s, map_t *m, dir_t dir)
     s->players->y, s->players->dir);
 }
 
-void eject(server_t *s, map_t *m, __attribute__((unused))char *elem)
+void eject(server_t *s, map_t *m)
 {
-    int pos = s->players->pos;
-    dir_t dir = s->players->dir;
-    int x = s->players->x;
-    int y = s->players->y;
+    int pos;
+    dir_t dir;
+    int x;
+    int y;
     bool found = false;
 
+    go_previous(s);
+    for (; s->players->next != NULL; s->players = s->players->next)
+        if (s->players->fd == s->acs->player->fd)
+            break;
+    pos = s->players->pos;
+    dir = s->players->dir;
+    x = s->players->x;
+    y = s->players->y;
     go_previous(s);
     for (; s->players->next != NULL; s->players = s->players->next) {
         if (s->players->x == x && s->players->y == y && s->players->pos != pos) {

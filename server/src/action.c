@@ -31,6 +31,18 @@ void do_actions(server_t *s, map_t *m)
         case SET:
             set(s, m);
             break;
+        case EJECT:
+            eject(s, m);
+            break;
+        case CONNECT:
+            connect_nbr(s);
+            break;
+        case FORK:
+            forked(s);
+            break;
+        case INCANTATION:
+            incantation(s);
+            break;
         default:
             break;
     }
@@ -53,6 +65,25 @@ void actions(server_t *s, map_t *m)
                     s->acs->prev->next = s->acs->next;
                     s->acs->next->prev = s->acs->prev;
                     free(s->acs);
+                }
+            } else {
+                if (s->acs->dur == FOOD) {
+                    go_previous(s);
+                    for (; s->players->next != NULL; s->players = s->players->next) {
+                        if (s->players->type == AI) {
+                            s->players->inventory[0] -= 1;
+                            if (s->players->inventory[0] <= 0) {
+                                dprintf(s->players->fd, "dead\n");
+                                dprintf(s->gui_fd, "pdi %d\n", s->players->pos);
+                                s->players->level = 0;
+                                close(s->players->fd);
+                                s->players->fd = 0;
+                                s->players->type = ANY;
+                                s->players->x = 0;
+                                s->players->y = 0;
+                            }
+                        }
+                    }
                 }
             }
         }

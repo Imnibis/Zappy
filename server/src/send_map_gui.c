@@ -7,16 +7,20 @@
 
 #include "server.h"
 
-void send_map_gui(server_t *s, map_t *m)
+void send_map_gui(server_t *s, map_t *m, char **teams)
 {
-    dprintf(s->players->fd, "msz %d %d\n", m->width, m->height);
-    dprintf(s->players->fd, "sgt %d\n", 100);
+    dprintf(s->gui_fd, "msz %d %d\n", m->width, m->height);
+    dprintf(s->gui_fd, "sgt %d\n", 100);
     for (; m->tiles->next != NULL; m->tiles = m->tiles->next) {
-        dprintf(s->players->fd, "bct %d %d", m->tiles->x, m->tiles->y);
+        dprintf(s->gui_fd, "bct %d %d", m->tiles->x, m->tiles->y);
         for (int i = 0; m->tiles->re[i] != -84; i++)
-            dprintf(s->players->fd, " %d", m->tiles->re[i]);
-        dprintf(s->players->fd, "\n");
+            dprintf(s->gui_fd, " %d", m->tiles->re[i]);
+        dprintf(s->gui_fd, "\n");
     }
     go_prev(m);
-    dprintf(s->players->fd, "tna bite\n");
+    dprintf(s->gui_fd, "tna");
+    for (int i = 0; teams[i]; i++) {
+        dprintf(s->players->fd, " %s", teams[i]);
+    dprintf(s->gui_fd, "\n");
+    }
 }

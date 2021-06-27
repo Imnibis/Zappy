@@ -78,7 +78,7 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
                     if (strcmp(str, "GRAPHIC") == 0 && s->players->type == ANY) {
                         s->players->type = CLIENT;
                         s->gui_fd = s->players->fd;
-                        send_map_gui(s, m);
+                        send_map_gui(s, m, si->nameX);
                     }
                     if (team_exists(si, str) == 0 && s->players->type == ANY) {
                         s->players->type = AI;

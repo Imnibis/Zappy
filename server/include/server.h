@@ -132,7 +132,7 @@ void init_clients(server_t *s);
 
 /* MAP */
 void map(map_t *m, int height, int width);
-void send_map_gui(server_t *s, map_t *m);
+void send_map_gui(server_t *s, map_t *m, char **teams);
 void init_map(map_t *map, int height, int width);
 
 typedef void (*ai_cmd)(server_t *s, map_t *m, char *elem);

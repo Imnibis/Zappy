@@ -39,6 +39,6 @@ def forkAI(sock:Socket):
     if (sock.receive() != "0\n"):
         sock.send("Fork\n")
     #AI of the fork
-        child = os.fork()
+        child = fork()
         if (child == 0):
             forkAI(sock)

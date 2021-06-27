@@ -7,8 +7,12 @@
 
 #include "server.h"
 
-void forward(server_t *s, map_t *m, __attribute__((unused))char *elem)
+void forward(server_t *s, map_t *m)
 {
+    go_previous(s);
+    for (; s->players->next != NULL; s->players = s->players->next)
+        if (s->players->fd == s->acs->player->fd)
+            break;
     if (s->players->dir == SOUTH) {
         if (s->players->y - 1 < 0)
             s->players->y = m->height - 1;
@@ -36,9 +40,13 @@ void forward(server_t *s, map_t *m, __attribute__((unused))char *elem)
     dprintf(s->players->fd, "ok\n");
 }
 
-void right(server_t *s, __attribute__((unused))map_t *m, __attribute__((unused))char *elem)
+void right(server_t *s)
 {
-        switch (s->players->dir) {
+    go_previous(s);
+    for (; s->players->next != NULL; s->players = s->players->next)
+        if (s->players->fd == s->acs->player->fd)
+            break;
+    switch (s->players->dir) {
         case EAST:
             s->players->dir = SOUTH;
             break;
@@ -59,8 +67,12 @@ void right(server_t *s, __attribute__((unused))map_t *m, __attribute__((unused))
     dprintf(s->players->fd, "ok\n");
 }
 
-void left(server_t *s, __attribute__((unused))map_t *m, __attribute__((unused))char *elem)
+void left(server_t *s)
 {
+    go_previous(s);
+    for (; s->players->next != NULL; s->players = s->players->next)
+        if (s->players->fd == s->acs->player->fd)
+            break;
     switch (s->players->dir) {
         case EAST:
             s->players->dir = NORTH;

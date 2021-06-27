@@ -37,15 +37,16 @@ typedef enum duration_s
     DEATH = 1,
     INVENTORY = 2,
     FORWARD = 3,
-    TURN = 4,
-    LOOK = 5,
-    EJECT = 6,
-    TAKE = 7,
-    SET = 8,
-    REFILL = 9,
-    FORK = 10,
-    FOOD = 11,
-    INCANTATION = 12
+    RIGHT = 4,
+    LEFT = 5,
+    LOOK = 6,
+    EJECT = 7,
+    TAKE = 8,
+    SET = 9,
+    REFILL = 10,
+    FORK = 11,
+    FOOD = 12,
+    INCANTATION = 13,
 } duration_t;
 
 typedef struct action_s action_t;
@@ -105,30 +106,35 @@ typedef struct server_s {
     player_t *players;
 } server_t;
 
-void go_previous(server_t *s);
-void go_pos(server_t *s, int pos);
-void init_clients(server_t *s);
 int create_server(server_t *s, server_config_t *info);
 int serv_attribution(server_t *s);
 void init_server(server_t *s, map_t *m, server_config_t *si);
 char *get_next_line(int fd);
-void map(map_t *m, int height, int width);
-void send_map_gui(server_t *s, map_t *m);
-void init_map(map_t *map, int height, int width);
-void command_handling(server_t *s, map_t *m, char *command);
-int team_exists(server_config_t *s, char *team);
-void request_inventory(server_t *s, map_t *m, char *elem);
-void forward(server_t *s, map_t *m, char *elem);
-void left(server_t *s, map_t *m, char *elem);
-void right(server_t *s, map_t *m, char *elem);
-void look(server_t *s,  map_t *m, char *elem);
+/* AI COMMANDS */
+void look(server_t *s,  map_t *m);
+void request_inventory(server_t *s);
+void forward(server_t *s, map_t *m);
+void left(server_t *s);
+void right(server_t *s);
 void broadcast(server_t *s,  map_t *m, char *elem);
 void connect_nbr(server_t *s,  map_t *m, char *elem);
 void forked(server_t *s,  map_t *m, char *elem);
 void eject(server_t *s,  map_t *m, char *elem);
-void take(server_t *s,  map_t *m, char *elem);
-void set(server_t *s,  map_t *m, char *elem);
+void take(server_t *s,  map_t *m);
+void set(server_t *s,  map_t *m);
 void incantation(server_t *s,  map_t *m, char *elem);
+void command_handling(server_t *s, char *command);
+int team_exists(server_config_t *s, char *team);
+/* CHAINED UTILS */
+void go_previous(server_t *s);
+void go_pos(server_t *s, int pos);
+void init_clients(server_t *s);
+
+/* MAP */
+void map(map_t *m, int height, int width);
+void send_map_gui(server_t *s, map_t *m);
+void init_map(map_t *map, int height, int width);
+
 typedef void (*ai_cmd)(server_t *s, map_t *m, char *elem);
 char **str_warray(char const *str, char f);
 int get_durations(duration_t dur);

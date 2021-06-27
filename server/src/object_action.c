@@ -26,10 +26,14 @@ int get_elem(char *elem)
     return 0;
 }
 
-void take(server_t *s, map_t *m, char *elem)
+void take(server_t *s, map_t *m)
 {
-    int re = get_elem(elem);
+    int re = get_elem(s->acs->elem);
 
+    go_previous(s);
+    for (; s->players->next != NULL; s->players = s->players->next)
+        if (s->players->fd == s->acs->player->fd)
+            break;
     go_prev(m);
     for (; m->tiles->next != NULL; m->tiles = m->tiles->next) {
         if (m->tiles->x == s->players->x && m->tiles->y) {
@@ -40,15 +44,20 @@ void take(server_t *s, map_t *m, char *elem)
                 dprintf(s->gui_fd, "pgt %d %d\n", s->players->pos, re);
             } else
                 dprintf(s->players->fd, "ko\n");
+            break;
         }
     }
     go_prev(m);
 }
 
-void set(server_t *s, map_t *m, char *elem)
+void set(server_t *s, map_t *m)
 {
-    int re = get_elem(elem);
+    int re = get_elem(s->acs->elem);
 
+   go_previous(s);
+    for (; s->players->next != NULL; s->players = s->players->next)
+        if (s->players->fd == s->acs->player->fd)
+            break;
     go_prev(m);
     for (; m->tiles->next != NULL; m->tiles = m->tiles->next) {
         if (m->tiles->x == s->players->x && m->tiles->y) {
@@ -59,6 +68,7 @@ void set(server_t *s, map_t *m, char *elem)
                 dprintf(s->gui_fd, "pdr %d %d\n", s->players->pos, re);
             } else
                 dprintf(s->players->fd, "ko\n");
+            break;
         }
     }
     go_prev(m);

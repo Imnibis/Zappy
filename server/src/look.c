@@ -50,99 +50,99 @@ int get_pos_y(int y, map_t *m)
     return y;
 }
 
-void get_tile(map_t *m, int x, int y, server_t *s)
+void get_tile(map_t *m, int x, int y, player_t *s)
 {
     go_prev(m);
     for (; m->tiles->next != NULL; m->tiles = m->tiles->next) {
         if (m->tiles->x == x && m->tiles->y == y) {
             for (int i = 0; m->tiles->re[i] != -84; i++) {
-                print_re(i, m->tiles->re[i], s->players->fd);
+                print_re(i, m->tiles->re[i], s->fd);
             }
         }
     }
 }
 
-void looked(map_t *m, server_t *s)
+void looked(map_t *m, player_t *s)
 {
     int tmp = 3;
     int v = 0;
     int ctt = 3;
-    int x = s->players->x;
-    int y = s->players->y;
+    int x = s->x;
+    int y = s->y;
 
-    for (int i = 1; i < s->players->level; i++, ctt += 3 + 2 * i);
-    dprintf(s->players->fd, "[ player,");
-    for (int i = 1; i != s->players->level + 1; i++) {
-        if (s->players->dir == EAST) {
+    for (int i = 1; i < s->level; i++, ctt += 3 + 2 * i);
+    dprintf(s->fd, "[ player,");
+    for (int i = 1; i != s->level + 1; i++) {
+        if (s->dir == EAST) {
             for (int j = 1; j != ((tmp - 1) / 2) + 1; j++) {
                 get_tile(m, get_pos_x(x - i, m), get_pos_y(y + j, m), s);
                 v++;
-                dprintf(s->players->fd, ",");
+                dprintf(s->fd, ",");
             }
             get_tile(m, get_pos_x(x - i, m), get_pos_y(y, m), s);
-            dprintf(s->players->fd, ",");
+            dprintf(s->fd, ",");
             v++;
             for (int j = ((tmp - 1) / 2); j != 0; j--) {
                 get_tile(m, get_pos_x(x - i, m), get_pos_y(y - j, m), s);
                 v++;
                 if (v != ctt)
-                    dprintf(s->players->fd, ",");
+                    dprintf(s->fd, ",");
             }
         }
-        if (s->players->dir == EAST) {
+        if (s->dir == EAST) {
             for (int j = ((tmp - 1) / 2); j != 0; j--) {
                 get_tile(m, get_pos_x(x - i, m), get_pos_y(y - j, m), s);
-                dprintf(s->players->fd, ",");
+                dprintf(s->fd, ",");
                 v++;
             }
             get_tile(m, get_pos_x(x - i, m), get_pos_y(y, m), s);
-            dprintf(s->players->fd, ",");
+            dprintf(s->fd, ",");
             v++;
             for (int j = 1; j != ((tmp - 1) / 2) + 1; j++) {
                 get_tile(m, get_pos_x(x - i, m), get_pos_y(y + j, m), s);
                 v++;
                 if (v != ctt)
-                    dprintf(s->players->fd, ",");
+                    dprintf(s->fd, ",");
             }
         }
-        if (s->players->dir == SOUTH) {
+        if (s->dir == SOUTH) {
             for (int j = 1; j != ((tmp - 1) / 2) + 1; j++) {
                 get_tile(m, get_pos_x(x + j, m), get_pos_y(y + i, m), s);
                 v++;
-                dprintf(s->players->fd, ",");
+                dprintf(s->fd, ",");
             }
             get_tile(m, get_pos_x(x, m), get_pos_y(y + i, m), s);
-            dprintf(s->players->fd, ",");
+            dprintf(s->fd, ",");
             v++;
             for (int j = ((tmp - 1) / 2); j != 0; j--) {
                 get_tile(m, get_pos_x(x - j, m), get_pos_y(y + i, m), s);
                 v++;
                 if (v != ctt)
-                    dprintf(s->players->fd, ",");
+                    dprintf(s->fd, ",");
             }
         }
-        if (s->players->dir == NORTH) {
+        if (s->dir == NORTH) {
             for (int j = ((tmp - 1) / 2); j != 0; j--) {
                 get_tile(m, get_pos_x(x - j, m), get_pos_y(y - i, m), s);
-                dprintf(s->players->fd, ",");
+                dprintf(s->fd, ",");
                 v++;
             }
             get_tile(m, get_pos_x(x, m), get_pos_y(y - i, m), s);
-            dprintf(s->players->fd, ",");
+            dprintf(s->fd, ",");
             v++;
             for (int j = 1; j != ((tmp - 1) / 2) + 1; j++) {
                 get_tile(m, get_pos_x(x + j, m), get_pos_y(y - i, m), s);
                 v++;
                 if (v != ctt)
-                    dprintf(s->players->fd, ",");
+                    dprintf(s->fd, ",");
             }
         }
         tmp += 2;
     }
-    dprintf(s->players->fd, " ]\n");
+    dprintf(s->fd, " ]\n");
 }
 
-void look(__attribute__((unused)) server_t *s, map_t *m, __attribute__((unused))char *elem)
+void look(server_t *s, map_t *m)
 {
-    looked(m, s);
+    looked(m, s->acs->player);
 }

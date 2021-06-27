@@ -13,8 +13,8 @@ int get_durations(duration_t dur)
         return 0;
     if (dur == INVENTORY)
         return 1;
-    if (dur == FORWARD || dur == TURN || dur == LOOK
-    || dur == EJECT || dur == TAKE || dur == SET)
+    if (dur == FORWARD || dur == LEFT || dur == LOOK
+    || dur == EJECT || dur == TAKE || dur == SET || dur == RIGHT)
         return 7;
     if (dur == REFILL)
         return 20;
@@ -24,4 +24,5 @@ int get_durations(duration_t dur)
         return 126;
     if (dur == INCANTATION)
         return 300;
+    return 0;
 }

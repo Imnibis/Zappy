@@ -67,7 +67,7 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
                     FD_CLR(s->players->fd, &wfd);
                 } else {
                     if (s->players->type != ANY)
-                        command_handling(s, m, str);
+                        command_handling(s, str);
                     if (strcmp(str, "GRAPHIC") == 0 && s->players->type == ANY) {
                         s->players->type = CLIENT;
                         s->gui_fd = s->players->fd;
@@ -88,7 +88,6 @@ void init_server(server_t *s, map_t *m, server_config_t *si)
         }
         go_previous(s);
         bzero(&str, sizeof(str));
-        // free(str);
     }
 }
 

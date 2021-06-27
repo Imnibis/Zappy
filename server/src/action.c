@@ -9,9 +9,30 @@
 
 void do_actions(server_t *s, map_t *m)
 {
-    if (s->acs->dur == LOOK) {
-        look(s, m, NULL);
-        go_previous(s);
+    switch (s->acs->dur) {
+        case LOOK:
+            look(s, m);
+            break;
+        case FORWARD:
+            forward(s, m);
+            break;
+        case LEFT:
+            left(s);
+            break;
+        case RIGHT:
+            right(s);
+            break;
+        case INVENTORY:
+            request_inventory(s);
+            break;
+        case TAKE:
+            take(s, m);
+            break;
+        case SET:
+            set(s, m);
+            break;
+        default:
+            break;
     }
 }
 
@@ -19,15 +40,12 @@ void actions(server_t *s, map_t *m)
 {
     clock_t new;
     action_t *head = s->acs;
-    action_t *tmp = NULL;
-
 
     for (; s->acs != NULL; s->acs = s->acs->next) {
         new = clock() - s->acs->begin;
         if (new / CLOCKS_PER_SEC >= get_durations(s->acs->dur) / s->freq) {
-            if (s->acs->dur == LOOK) {
-                // do_actions(s, m);
-                printf("LOOK on pos %d\n", s->acs->player->fd);
+            if (s->acs->dur != DEATH && s->acs->dur != REFILL && s->acs->dur != FOOD) {
+                do_actions(s, m);
                 if (s->acs->next == NULL) {
                     s->acs->prev->next = NULL;
                     free(s->acs);
@@ -40,5 +58,4 @@ void actions(server_t *s, map_t *m)
         }
     }
     s->acs = head;
-    // for (; s->acs->prev != NULL; s->acs = s->acs->prev);
 }

@@ -44,7 +44,7 @@ class Player():
     def update_lvl(self) -> None:
         self.lvl += 1
 
-    def broadcast_message(sock:Socket, message:str) -> None:
+    def broadcast_message(self, sock:Socket, message:str) -> None:
         sock.send("Broadcast " + message + '\n')
 
     def start_incantation(self, sock:Socket) -> None:
@@ -52,7 +52,8 @@ class Player():
         if (sock.receive() != "ko\n"):
             self.update_lvl()
         else:
-            self.broadcast_message(sock, "incantation " + str(self.lvl))
+            to_send = "incantation" + str(self.lvl)
+            self.broadcast_message(sock, to_send)
 
     def update_pinv(self, sock:Socket) -> None:
         new_inv = [0, 0, 0, 0, 0, 0, 0]

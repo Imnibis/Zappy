@@ -3,8 +3,7 @@ from Client import Client
 from Map import Map
 from Player import Player
 from Socket import Socket
-from os import fork, system
-import subprocess
+from subprocess import run
 
 def get_tiles_content(sock:Socket, ply:Player) -> list:
     sock.send("Look\n")
@@ -34,7 +33,7 @@ def forkAI(sock:Socket, cli:Client, ply:Player) -> None:
         sock.send("Fork\n")
         if sock.receive() == "ok\n":
             cli.can_connect -= 1
-            subprocess.run(["python3", "main.py", "-p", str(cli.port), "-n", cli.name, "-h", cli.machine])
+            run(["python3", "main.py", "-p", str(cli.port), "-n", cli.name, "-h", cli.machine])
 
 def loop(cli:Client, sock:Socket, map_info:Map, ply:Player) -> None:
     ply.update_pinv(sock)

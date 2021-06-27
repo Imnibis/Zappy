@@ -5,8 +5,8 @@
 ** main.c
 */
 
-#include "map.h"
 #include "server.h"
+
 void print_map(map_t *map);
 int print_help()
 {
@@ -26,8 +26,9 @@ int main(int ac, char **argv)
 {
     server_config_t server_info;
     server_t *s = NULL;
+    map_t *m = NULL;
 
-    if ((!strcmp(argv[1], "-help")) == 1)
+    if (ac <= 7 || (!strcmp(argv[1], "-help")) == 1)
         return print_help();
     handling_argument(ac, argv, &server_info);
     s = malloc(sizeof(server_t));
@@ -37,8 +38,9 @@ int main(int ac, char **argv)
     }
     if (serv_attribution(s) == 1)
         return 84;
-    map_t *m = malloc(sizeof(map_t));
+    m = malloc(sizeof(map_t));
+    s->freq = server_info.freq;
     map(m, server_info.height, server_info.width);
-    init_server(s, m);
+    init_server(s, m, &server_info);
     return 0;
 }

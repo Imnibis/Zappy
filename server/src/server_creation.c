@@ -35,7 +35,7 @@ void set_newclient(server_t *s, int *sock)
     go_previous(s);
 }
 
-void init_server(server_t *s, map_t *m)
+void init_server(server_t *s, map_t *m, server_config_t *si)
 {
     int max_fd = s->sockid;
     int nw;
@@ -44,12 +44,15 @@ void init_server(server_t *s, map_t *m)
     struct sockaddr_in adr;
     socklen_t ads = sizeof(adr);
     char *str = NULL;
+    struct timeval tv = {0, 0};
 
+    s->gui_fd = 0;
+    srand(time(NULL));
     init_clients(s);
     while (1) {
+        actions(s, m);
         set_rfd(s, &max_fd, &rfd, &wfd);
-        if (select(max_fd + 1, &rfd, &wfd, NULL, 0x0) < 0)
-            break;
+        select(max_fd + 1, &rfd, &wfd, NULL, &tv);
         if (FD_ISSET(s->sockid, &rfd)) {
             if ((nw = accept(s->sockid, (struct sockaddr *)&adr, &ads)) < 0)
                 break;
@@ -63,14 +66,28 @@ void init_server(server_t *s, map_t *m)
                     FD_CLR(s->players->fd, &rfd);
                     FD_CLR(s->players->fd, &wfd);
                 } else {
-                    if (strcmp(str, "GRAPHIC") == 0)
+                    if (s->players->type != ANY)
+                        command_handling(s, str);
+                    if (strcmp(str, "GRAPHIC") == 0 && s->players->type == ANY) {
+                        s->players->type = CLIENT;
+                        s->gui_fd = s->players->fd;
                         send_map_gui(s, m);
+                    }
+                    if (team_exists(si, str) == 0 && s->players->type == ANY) {
+                        s->players->type = AI;
+                        printf("new ai\n");
+                        s->players->x = rand() % m->width;
+                        s->players->y = rand() % m->height;
+                        s->players->team = strdup(str);
+                        dprintf(s->gui_fd, "pnw %d %d %d %d 0 bite\n", s->players->pos, s->players->x, s->players->y, s->players->dir);
+                        dprintf(s->players->fd, "%d\n%d %d\n", s->cli_max - s->nb_cli, m->width, m->height);
+                    }
                     printf("%s\n", str);
                 }
             }
         }
         go_previous(s);
-        free(str);
+        bzero(&str, sizeof(str));
     }
 }
 

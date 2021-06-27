@@ -25,9 +25,10 @@ struct exec
 {
     char *flag;
     int (*fct) (const char *, server_config_t *);
+    int executed;
 };
 
-int handling_argument(int ac, char **argv, server_config_t *config);
+void handling_argument(int ac, char **argv, server_config_t *config);
 int find_next_cmd(int index, char **args, int ac);
 int setport(const char *port, server_config_t *config);
 int setwidth(const char *width, server_config_t *config);
@@ -35,5 +36,6 @@ int setheight(const char *height, server_config_t *config);
 int setclient(const char *nb, server_config_t *config);
 int setfreq(const char *freq, server_config_t *config);
 void setname(char **args, int index, server_config_t *config);
+void cmd_done(struct exec tab[]);
 
 #endif // !PARSER_SERVER

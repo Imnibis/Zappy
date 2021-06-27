@@ -30,6 +30,11 @@ class Player():
             if tmin < tile < tmax:
                 for j in range(0, i):
                     sock.send("Forward\n")
+                    ###
+                    ###
+                    ### Do i need to wait for server response before sending another one ?
+                    ###
+                    ###
                 if tile < center:
                     sock.send("Left\n")
                     for l in range(0, center - tile):

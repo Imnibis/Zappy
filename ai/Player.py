@@ -1,4 +1,5 @@
 from Socket import Socket
+from gc import collect as rayoulyon1
 
 class Player():
     def __init__(self) -> None:
@@ -16,17 +17,7 @@ class Player():
         self.requiredPlayers = [0, 1, 2, 2, 4, 4, 6, 6]
         self.stones = ["linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"]
 
-    def set_obj(self, sock:Socket, ply, obj:str) -> None:
-        sock.send("Set " + obj + '\n')
-        if (sock.receive(ply) == "dead"):
-            self.status = False
-
-    def take_obj(self, sock:Socket, ply, obj:str) -> None:
-        sock.send("Take " + obj + '\n')
-        if (sock.receive(ply) == "dead"):
-            self.status = False
-
-    def go_to(self, sock:Socket, ply, tile:int) -> None:
+    def go_to(self, sock:Socket, tile:int) -> None:
         for i in range(1, 9):
             tmin = i**2
             tmax = tmin + (i*2)
@@ -36,47 +27,74 @@ class Player():
             if tmin < tile < tmax:
                 for j in range(0, i):
                     sock.send("Forward\n")
-                    sock.receive(ply)
+                    sock.receive()
                 if tile < center:
                     sock.send("Left\n")
-                    sock.receive(ply)
+                    sock.receive()
                     for l in range(0, center - tile):
                         sock.send("Forward\n")
-                        sock.receive(ply)
+                        sock.receive()
                 elif tile > center:
                     sock.send("Right\n")
-                    sock.receive(ply)
+                    sock.receive()
                     for m in range(0, tile - center):
                         sock.send("Forward\n")
-                        sock.receive(ply)
-
-    def update_pinv(self, sock:Socket, ply) -> None:
-        sock.send("Inventory\n")
-        output = sock.receive(ply)
-        if (output == "ko\n"):
-            while output == "ko\n":
-                sock.send("Inventory\n")
-                output = sock.receive(ply)
-                print(output)
-        print(output)
-        output = output[2:-2]
-        output = output.split(", ")
-        for i in range(len(output)):
-            new_out = output[i].split(" ")
-            output[i] = new_out[1]
-        for i in range(len(output)):
-            self.pin[i] = int(output[i])
-
-    def check_requirement(self) -> bool:
-        for i in range(6):
-            if (self.requirement[self.lvl][i] != self.pin[i + 1]):
-                return False
-            else:
-                pass
-        return True
-
-    def broadcast_message(sock:Socket, message: str) -> None:
-        sock.send("Broadcast " + message + '\n')
+                        sock.receive()
 
     def update_lvl(self) -> None:
         self.lvl += 1
+
+    def broadcast_message(sock:Socket, message:str) -> None:
+        sock.send("Broadcast " + message + '\n')
+
+    def start_incantation(self, sock:Socket) -> None:
+        sock.send("Incantation\n")
+        if (sock.receive() != "ko\n"):
+            self.update_lvl()
+        else:
+            self.broadcast_message(sock, "incantation " + str(self.lvl))
+
+    def update_pinv(self, sock:Socket) -> None:
+        new_inv = [0, 0, 0, 0, 0, 0, 0]
+
+        sock.send("Inventory\n")
+        output = sock.receive()
+        output = output[2:-3]
+        output = output.split(", ")
+        for i in range(len(output)):
+            new_inv[i] = int(output[i].split(" ")[1])
+        self.pin = new_inv
+
+    def set_obj(self, sock:Socket, obj:str) -> None:
+        sock.send("Set " + obj + '\n')
+
+    def take_obj(self, sock:Socket, obj:str) -> None:
+        sock.send("Take " + obj + '\n')
+
+    def needed_stone(self) -> str:
+        req = list(self.requirement[self.lvl - 1])
+        inv = list(self.pin)
+        inv.pop(0)
+        for i in range(0, 6):
+            if inv[i] < req[i]:
+                return self.stones[i]
+        del req, inv, i
+        rayoulyon1()
+        return str("")
+
+    def check_requirement(self) -> bool:
+        inv = self.pin
+        inv.pop(0)
+        for i in range(0, 6):
+            if (self.requirement[self.lvl - 1] != inv):
+                return False
+            else:
+                pass
+        del i, inv
+        rayoulyon1()
+        return True
+
+    def __exit__(self):
+        del self.status, self.ppo, self.lvl, self.pin, self.requirement, self.requiredPlayers, self.stones
+        rayoulyon1()
+        pass

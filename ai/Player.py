@@ -21,7 +21,23 @@ class Player():
         print(sock.receive())
 
     def go_to(self, sock:Socket, tile:int) -> None:
-        return -1
+        for i in range(1, 9):
+            tmin = i**2
+            tmax = tmin + (i*2)
+            delta = (tmax - tmin) / 2
+            center = tmin + delta
+            center = int(center)
+            if tmin < tile < tmax:
+                for j in range(0, i):
+                    sock.send("Forward\n")
+                if tile < center:
+                    sock.send("Left\n")
+                    for l in range(0, center - tile):
+                        sock.send("Forward\n")
+                elif tile > center:
+                    sock.send("Right\n")
+                    for m in range(0, tile - center):
+                        sock.send("Forward\n")
 
     def update_pinv(self, sock:Socket) -> None:
         sock.send("Inventory\n")

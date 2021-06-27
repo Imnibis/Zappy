@@ -5,22 +5,16 @@
 ## Makefile
 ##
 
-all:
-	server
-	ai
-	gui
+all:	server ai gui
 
 clean:
 	@make clean --no-print-directory -C server
-	@rm zappy_ai
+	@rm  -rf zappy_gui
+	@rm  -rf zappy_ai
 
 fclean: clean
-	@make fclean --no-print-directory -C server
 
-re:
-	fclean
-	ai
-	gui
+re:	fclean	ai	gui
 	@make re --no-print-directory -C server
 
 server:

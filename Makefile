@@ -11,6 +11,7 @@ clean:
 	@make clean --no-print-directory -C server
 	@rm  -rf zappy_gui
 	@rm  -rf zappy_ai
+	@rm  -rf ai/__pycache__
 
 fclean: clean
 

@@ -1,0 +1,4 @@
+client/Releases/* linguist-detectable=false
+*.aspx linguist-detectable=false
+*.shader linguist-detectable=false
+*.cginc linguist-detectable=false

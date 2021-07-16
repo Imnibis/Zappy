@@ -1,0 +1,4 @@
+#!/bin/sh
+chmod +x ./ai/main.py
+cd ai
+./main.py $@
